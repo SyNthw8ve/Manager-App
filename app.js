@@ -2,7 +2,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const {app, BrowserWindow } = electron;
+const { app, BrowserWindow } = electron;
 
 let mainWindow;
 
@@ -28,7 +28,7 @@ function createWindow() {
 
 app.on('ready', createWindow )
 
-/*app.on('browser-window-created', (err, window) => {
+app.on('browser-window-created', (err, window) => {
 
   window.setMenu(null);
-})*/
+})
