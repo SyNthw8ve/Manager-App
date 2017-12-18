@@ -1,31 +1,85 @@
 body {
 
-  background: #332D29;
+  background: #404040;
+  margin: 0;
+
 
 }
 
-.icon-bar {
+#main-nav{
 
-    width: 70px; /* Set a specific width */
-    background-color: #555; /* Dark-grey background */
+  width: 100%;
+  max-height: 136px;
+  background: #303030;
+  border: none;
+  display: inline-block;
+
 }
 
-.icon-bar a {
+#main-nav ul{
 
-    display: block; /* Make the links appear below each other instead of side-by-side */
-    text-align: center; /* Center-align text */
-    padding: 16px; /* Add some padding */
-    transition: all 0.3s ease; /* Add transition for hover effects */
-    color: white; /* White text color */
-    font-size: 28px; /* Increased font-size */
+  list-style: none;
+  margin: 0px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 12px;
+
 }
 
-.icon-bar a:hover {
+#main-nav li{
 
-    background-color: #01bcbc;
+  display: inline-block;
+  margin-right: 13px;
 }
 
-.active {
+#main-nav #logo{
 
-    background-color: #01bcbc;
+  max-height: 55px;
+  max-width: 55px;
+  margin: 0;
+}
+
+#wrapper{
+
+  margin: 0;
+  display: grid;
+  grid-template-columns: 67.7% 32.3%;
+  grid-auto-rows: 660px;
+  max-width: 100%;
+
+}
+
+#watson-chat{
+
+  background: #4A4A4A;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  position: relative;
+
+}
+
+#watson-display{
+
+  background: #413B3B;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  position: absolute;
+  max-width: 96.7%;
+  height: 78.3%;
+  left: 15px;
+  top: 15px;
+
+}
+
+#msg-content{
+
+  background: #413B3B;
+  position: absolute;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  max-width: 96.7%;
+  height: 10.0%;
+  left: 15px;
+  top: 550px;
+
 }

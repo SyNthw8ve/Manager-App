@@ -4,11 +4,13 @@ const path = require('path');
 
 const { app, BrowserWindow } = electron;
 
+require('electron-reload')(__dirname);
+
 let mainWindow;
 
 function createWindow() {
 
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 1366, height: 728, frame: false});
 
   mainWindow.loadURL(url.format({
 
