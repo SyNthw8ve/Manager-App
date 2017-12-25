@@ -9,42 +9,101 @@
   </head>
 
   <body>
-    <nav id="main-nav">
-        <ul>
-          <li>
-              <a href="./index.html"><img  id="logo" src="../../assets/img/logo.png" /></a>
-          </li>
-          <li>
-            Home
-          </li>
-        </ul>
-    </nav>
 
-    <div id="wrapper">
+    <header>
 
-      <div id="chart">
+      <div class="wrapper">
+
+        <a href="./index.html"><img id="logo" src="../../assets/img/logo.png" /></a>
+
+        <nav>
+            <ul>
+              <li>
+                <a href="./index.html">
+                  <i class="icon fas fa-home"></i>
+                  <p>
+                    Home
+                  </p>
+                </a>
+              </li>
+              <li class="dropdown">
+                <a class="dropbtn">
+                  <i class="icon fas fa-list-ul"></i>
+                  <p>
+                    Manager
+                  </p>
+                </a>
+                  <div class="dropdown-content">
+                    <a>
+                      <i class="fas fa-tint"></i>
+                      <p>Water</p>
+                      <i class="next fas fa-chevron-right"></i>
+                    </a>
+                    <a>
+                      <i class="fas fa-bolt"></i>
+                      <p>Electricity</p>
+                      <i class="next fas fa-chevron-right"></i>
+                    </a>
+                    <a>
+                      <i class="fas fa-cloud"></i>
+                      <p>Gas</p>
+                      <i class="next fas fa-chevron-right"></i>
+                    </a>
+                  </div>
+              </li>
+              <li>
+                <a href="./config.html">
+                  <i class="icon fas fa-cog"></i>
+                  <p>
+                    Config
+                  </p>
+                </a>
+              </li>
+            </ul>
+
+        </nav>
+
+        <form>
+
+          <input type="text" name="search" placeholder="Search">
+
+        </form>
 
       </div>
 
-      <div id="watson-chat">
+    </header>
 
-        <div id="watson-display">
+    <section id="left-display">
+        <div>
 
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed nisl mauris. Sed cursus augue in massa sollicitudin sodales. Praesent vitae pretium ligula. Quisque vel purus vitae sapien laoreet imperdiet. Nulla faucibus facilisis nunc, nec lacinia enim. Aliquam erat volutpat. Mauris fringilla elit posuere dui ultrices luctus.
-          </p>
+        </div>
+    </section>
+
+    <section id="right-display">
+
+        <div id="chat-display">
 
         </div>
 
-        <div id="msg-content">
-          <p>
-            Lorem ipsum dolor sit ametes luctus. consectetur adipiscing elit. Duis se
-          </p>
+        <div id="chat-message">
+
+          <i id="micro" class="fas fa-microphone" ></i>
+
+          <div id="vbar"></div>
+
+          <form>
+
+            <input type="text" name="msg" placeholder="Talk to Watson!">
+
+          </form>
+
         </div>
 
-      </div>
+    </section>
 
-    </div>
+    <script type="text/javascript" src="../scripts/index.js">
+
+    </script>
 
   </body>
 </html>

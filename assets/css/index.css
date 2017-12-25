@@ -1,85 +1,316 @@
 body {
 
   background: #404040;
+  font-family: Roboto;
   margin: 0;
-
-
 }
 
-#main-nav{
+/* Navbar */
+.wrapper{
 
   width: 100%;
-  max-height: 136px;
-  background: #303030;
-  border: none;
-  display: inline-block;
+  margin: 0;
 
 }
 
-#main-nav ul{
+header{
+
+  background: #303030;
+
+}
+
+header nav{
+
+  float: left;
+
+}
+
+header p{
+
+  display: inline-block;
+  font-size: 20px;
+  margin: 0px;
+
+}
+
+header:after {
+
+  content: "";
+  display: block;
+  clear: both;
+
+}
+
+header nav ul{
 
   list-style: none;
-  margin: 0px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 12px;
+  margin-top: 0px;
 
 }
 
-#main-nav li{
+header nav li{
 
+  float: left;
+  padding-top: 15px;
+  padding-left: 23px;
+  padding-right: 23px;
+  width: 120px;
+
+}
+
+header nav li:hover{
+
+  border-top: 4px solid #00D8F0;
+
+}
+
+header nav a{
+
+  text-decoration: none;
+  color: #fff;
+
+}
+
+#logo{
+
+  height: 55px;
+  width: 55px;
+  float: left;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+
+}
+
+header form{
+
+  float: right;
+  margin-right: 70px;
+  margin-bottom: 0px;
+  margin-top: 10px;
+
+}
+
+header input[type="text"]{
+
+  background: url(../img/search.png) right no-repeat;
+  background-size: 25px 25px;
+  background-color: #303030;
+
+  border-bottom: 1px solid #fff;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+
+  padding-top: 10px;
+  margin-top: 5px;
+
+  font-size: 18px;
+  color: #fff;
+
+}
+
+.icon{
+
+  font-size: 25px;
+  margin-right: 10px;
+  margin-top: 5px;
   display: inline-block;
-  margin-right: 13px;
+
 }
 
-#main-nav #logo{
+/* Main Content */
 
-  max-height: 55px;
-  max-width: 55px;
+#left-display{
+
+  width: 70.7%;
   margin: 0;
-}
-
-#wrapper{
-
-  margin: 0;
-  display: grid;
-  grid-template-columns: 67.7% 32.3%;
-  grid-auto-rows: 660px;
-  max-width: 100%;
+  float: left;
+  height: 660px;
 
 }
 
-#watson-chat{
+#right-display{
 
-  background: #4A4A4A;
+  float: right;
+  width: 29.3%;
+  position: relative;
+  background-color: #4A4A4A;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
-  position: relative;
+  margin: 0;
+  height: 660px;
 
 }
 
-#watson-display{
+#chat-display{
 
   background: #413B3B;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
   position: absolute;
-  max-width: 96.7%;
-  height: 78.3%;
+  width: 96.7%;
+  height: 76.3%;
   left: 15px;
   top: 15px;
 
 }
 
-#msg-content{
+#chat-message form{
+
+  float: left;
+  margin-left: 10px;
+  width: 40%;
+  padding: 23px 0px;
+
+}
+
+#chat-message input[type="text"]{
+
+  background: #413B3B;
+  border-style: none;
+  font-size: 18px;
+  color: #fff;
+
+}
+
+#chat-message{
 
   background: #413B3B;
   position: absolute;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
-  max-width: 96.7%;
+  width: 96.7%;
   height: 10.0%;
   left: 15px;
-  top: 550px;
+  top: 540px;
+
+}
+
+#chat-message button{
+
+  background: #413B3B;
+  border: none;
+  margin-top: 13px;
+  margin-left: 6px;
+  padding: 0px 0px;
+  float: left;
+
+}
+
+#vbar{
+
+  height: 40px;
+  border-left: 1px solid #D1D1D1;
+  margin-top: 13px;
+  float: left;
+  padding: 0px;
+
+}
+
+.fa-microphone{
+
+  float: left;
+  cursor: pointer;
+  padding: 0px 12px;
+  margin-left: 2px;
+  overflow: hidden;
+  color: #707070;
+  margin-top: 16px;
+  font-size: 32px;
+
+}
+
+/* dropdown-menu */
+
+.dropbtn {
+
+    display: inline-block;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 18px;
+    cursor: pointer;
+
+}
+
+
+li.dropdown {
+
+    display: inline-block;
+
+}
+
+.dropdown-content {
+
+    display: none;
+    position: absolute;
+    border-bottom-right-radius: 20px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    width: 230px;
+    z-index: 1;
+
+}
+
+.dropdown-content a {
+
+    color: white;
+    border: 1px solid #707070;
+    background: #303030;
+    padding: 8px 0px;
+    padding-left: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+
+}
+
+.dropdown-content a:last-child {
+
+    border-bottom-right-radius: 20px;
+
+}
+
+.dropdown-content a:hover {
+
+  border-left: 4px solid #00D8F0;
+
+}
+
+.dropdown-content a:hover i.next {
+
+  font-size: 25px;
+
+}
+
+
+.dropdown:hover .dropdown-content {
+
+    display: block;
+
+}
+
+.dropdown-content i{
+
+  font-size: 25px;
+  margin-top: 2px;
+  margin-right: 10px;
+
+}
+
+dropdown-content p{
+
+  font-size: 18px;
+  display: inline-block;
+
+}
+
+.next{
+
+  margin-top: 2px;
+  margin-right: 5px;
+  font-size: 0px;
+  float: right;
 
 }
