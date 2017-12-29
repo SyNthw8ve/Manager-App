@@ -6,6 +6,7 @@ body {
 }
 
 /* Navbar */
+
 .wrapper{
 
   width: 100%;
@@ -44,13 +45,13 @@ header:after {
 header nav ul{
 
   list-style: none;
-  margin-top: 0px;
+  display: flex;
+  margin: 0px 0px;
 
 }
 
 header nav li{
 
-  float: left;
   padding-top: 15px;
   padding-left: 23px;
   padding-right: 23px;
@@ -121,42 +122,69 @@ header input[type="text"]{
 
 /* Main Content */
 
-#left-display{
+.flex-container{
 
-  width: 70.7%;
-  margin: 0;
-  float: left;
-  height: 660px;
+  display: flex;
 
 }
 
+#left-display{
+
+  width: 73.7%;
+  height: 635px;
+  margin: 0;
+
+}
+
+
 #right-display{
 
-  float: right;
-  width: 29.3%;
-  position: relative;
+  width: 26.3%;
+  height: 635px;
   background-color: #4A4A4A;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
-  margin: 0;
-  height: 660px;
+  margin: 0px;
 
 }
 
 #chat-display{
 
+  width: 96%;
+  height: 76.3%;
   background: #413B3B;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
-  position: absolute;
-  width: 96.7%;
-  height: 76.3%;
-  left: 15px;
-  top: 15px;
+  position: relative;
+  top: -25px;
+  margin-left: 15px;
 
 }
 
-#chat-message form{
+#chat-display ul{
+
+  list-style: none;
+  margin: 0px;
+  padding-left: 0px;
+  margin-top: 30px;
+
+}
+
+.msg-wrapper{
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 40px 80px;;
+
+}
+
+#chat-display li{
+
+  margin-bottom: 40px;
+
+}
+
+#watson-form{
 
   float: left;
   margin-left: 10px;
@@ -177,13 +205,12 @@ header input[type="text"]{
 #chat-message{
 
   background: #413B3B;
-  position: absolute;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
-  width: 96.7%;
+  width: 96%;
   height: 10.0%;
-  left: 15px;
-  top: 540px;
+  margin-left: 15px;
+  margin-top: 15px;
 
 }
 
