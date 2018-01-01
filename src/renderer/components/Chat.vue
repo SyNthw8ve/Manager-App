@@ -11,7 +11,7 @@
 
         <div id="chat-message">
 
-          <icon id="micro" class="fas fa-microphone" name="microphone" scale="2" ></icon>
+          <i id="micro" class="fas fa-microphone"></i>
 
           <div id="vbar"></div>
 

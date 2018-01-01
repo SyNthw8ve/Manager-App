@@ -6,7 +6,7 @@
             <ul>
               <li>
                 <a href="./index.html">
-                  <icon class="icon fas fa-home" name="home" scale="1.6"></icon>
+                  <i class="icon fas fa-home"></i>
                   <p>
                     Home
                   </p>
@@ -14,32 +14,32 @@
               </li>
               <li class="dropdown">
                 <a class="dropbtn">
-                  <icon class="icon fas fa-list-ul" name="list" scale="1.4"></icon>
+                  <i class="icon fas fa-list-ul" ></i>
                   <p>
                     Manager
                   </p>
                 </a>
                   <div class="dropdown-content">
                     <a href="./water.html">
-                      <icon class="fas fa-tint" name="tint" scale="1.5"></icon>
+                      <i class="fas fa-tint" ></i>
                       <p>Water</p>
-                      <icon class="next fas fa-chevron-right" name="chevron-right" scale="1.4"></icon>
+                      <i class="next fas fa-chevron-right" ></i>
                     </a>
                     <a href="./elec.html">
-                      <icon class="fas fa-bolt" name="bolt" scale="1.5"></icon>
+                      <i class="fas fa-bolt" ></i>
                       <p>Electricity</p>
-                      <icon class="next fas fa-chevron-right" name="chevron-right" scale="1.4"></icon>
+                      <i class="next fas fa-chevron-right" ></i>
                     </a>
                     <a>
-                      <icon class="fas fa-cloud" name="cloud" scale="1.5"></icon>
+                      <i class="fas fa-cloud" ></i>
                       <p>Gas</p>
-                      <icon class="next fas fa-chevron-right" name="chevron-right" scale="1.4"></icon>
+                      <i class="next fas fa-chevron-right" ></i>
                     </a>
                   </div>
               </li>
               <li>
                 <a href="./config.html">
-                  <icon class="icon fas fa-cog" name="cog" scale="1.8"></icon>
+                  <i class="icon fas fa-cog" ></i>
                   <p>
                     Config
                   </p>

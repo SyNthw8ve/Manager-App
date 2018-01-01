@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <navbar></navbar>
     <div class="flex-container">
       <mainContent></mainContent>
