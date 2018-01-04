@@ -8,6 +8,7 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+export const bus = new Vue()
 
 new Vue({
   components: { App },

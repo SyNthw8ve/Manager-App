@@ -1,42 +1,58 @@
 <template>
+
   <section id="right-display">
 
         <div id="chat-display">
 
           <ul>
-            <li></li>
           </ul>
 
         </div>
 
         <div id="chat-message">
 
-          <i id="micro" class="fas fa-microphone"></i>
+          <i v-on:click="changeClass()" ref="micro" id="micro" class="fas fa-microphone"></i>
 
           <div id="vbar"></div>
 
-          <form id="watson-form">
-
-            <input type="text" name="msg" placeholder="Talk to Watson!">
-
-          </form>
+          <input type="text" name="msg" placeholder="Talk to Watson!">
 
         </div>
 
     </section>
+
 </template>
 
 <script>
   export default {
-    name: 'chat'
+
+    name: 'chat',
+
+    methods: {
+
+      changeClass: function () {
+
+        let micro = this.$refs.micro
+
+        if (micro.classList.contains('fa-microphone-slash')) {
+
+          micro.classList.remove('fa-microphone-slash')
+
+        } else {
+
+          micro.classList.add('fa-microphone-slash')
+        }
+      }
+    }
   }
 </script>
 
 <style scoped>
+
   #right-display{
 
-    width: 26.3%;
-    height: 635px;
+    width: 23.3%;
+    height: 640px;
     background-color: #4A4A4A;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
@@ -51,8 +67,8 @@
     background: #413B3B;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
-    position: relative;
-    top: -25px;
+    overflow-y: auto;
+    margin-top: 15px;
     margin-left: 15px;
 
   }
@@ -66,24 +82,9 @@
 
   }
 
-  .msg-wrapper{
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 40px 80px;;
-
-  }
-
   #chat-display li{
 
     margin-bottom: 40px;
-
-  }
-
-  #watson-form{
-
-    margin-left: 10px;
-    padding: 23px 0px;
 
   }
 
@@ -91,6 +92,8 @@
 
     background: #413B3B;
     border-style: none;
+    padding: 5px 0px;
+    margin-left: 10px;
     font-size: 18px;
     color: #fff;
 
@@ -105,7 +108,7 @@
     width: 95%;
     height: 10.0%;
     margin-left: 15px;
-    margin-top: 15px;
+    margin-top: 35px;
 
   }
 

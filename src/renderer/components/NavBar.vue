@@ -1,17 +1,25 @@
 <template>
   <header>
   <div id="wrapper">
-    <a href="./index.html"><img id="logo" src="../assets/logo.png" /></a>
+    <a v-on:click="changeChart('home')"><img id="logo" src="../assets/logo.png" /></a>
         <nav>
             <ul>
               <li>
-                <a href="./index.html">
+                <a v-on:click="changeChart('home')">
                   <i class="icon fas fa-home"></i>
                   <p>
                     Home
                   </p>
                 </a>
               </li>
+              <!-- <li>
+                <a v-on:click="">
+                  <i class="icon fas fa-list-ul" ></i>
+                  <p>
+                    Manager
+                  </p>
+                </a>
+              </li> -->
               <li class="dropdown">
                 <a class="dropbtn">
                   <i class="icon fas fa-list-ul" ></i>
@@ -20,7 +28,7 @@
                   </p>
                 </a>
                   <div class="dropdown-content">
-                    <a href="./water.html">
+                    <a v-on:click="changeChart('water')">
                       <i class="fas fa-tint" ></i>
                       <p>Water</p>
                       <i class="next fas fa-chevron-right" ></i>
@@ -37,9 +45,9 @@
                     </a>
                   </div>
               </li>
-              <li>
-                <a href="./config.html">
-                  <i class="icon fas fa-cog" ></i>
+              <li v-on:mouseenter="spin(true)" v-on:mouseleave="spin(false)">
+                <a  v-on:click="changeChart('home')">
+                  <i ref="cog" class="icon fas fa-cog" ></i>
                   <p>
                     Config
                   </p>
@@ -55,10 +63,32 @@
 </template>
 
 <script>
+  import { bus } from '../main'
+
   export default {
     name: 'home',
 
     methods: {
+
+      changeChart: function (chart) {
+
+        bus.$emit('chartChanged', chart)
+
+      },
+
+      spin: function (event) {
+
+        let cog = this.$refs.cog;
+
+        if(event){
+
+          cog.classList.add('fa-spin');
+
+        } else {
+
+          cog.classList.remove('fa-spin');
+        }
+      }
 
     }
   }
@@ -68,210 +98,210 @@
 
 /* Navbar */
 
-.wrapper{
+  .wrapper{
 
-width: 100%;
-margin: 0;
+  width: 100%;
+  margin: 0;
 
-}
+  }
 
-header{
+  header{
 
-background: #303030;
+  background: #303030;
 
-}
+  }
 
-header nav{
+  header nav{
 
-float: left;
+  float: left;
 
-}
+  }
 
-header p{
+  header p{
 
-display: inline-block;
-font-size: 20px;
-margin: 0px;
+  display: inline-block;
+  font-size: 20px;
+  margin: 0px;
 
-}
+  }
 
-header:after {
+  header:after {
 
-content: "";
-display: block;
-clear: both;
+  content: "";
+  display: block;
+  clear: both;
 
-}
+  }
 
-header nav ul{
+  header nav ul{
 
-list-style: none;
-display: flex;
-margin: 0px 0px;
+  list-style: none;
+  display: flex;
+  margin: 0px 0px;
 
-}
+  }
 
-header nav li{
+  header nav li{
 
-padding-top: 15px;
-padding-left: 23px;
-padding-right: 23px;
-width: 120px;
+  padding-top: 15px;
+  padding-left: 23px;
+  padding-right: 23px;
+  width: 120px;
 
-}
+  }
 
-header nav li:hover{
+  header nav li:hover{
 
-border-top: 4px solid #00D8F0;
+  border-top: 4px solid #00D8F0;
 
-}
+  }
 
-header nav a{
+  header nav a{
 
-text-decoration: none;
-color: #fff;
+  text-decoration: none;
+  color: #fff;
 
-}
+  }
 
-#logo{
+  #logo{
 
-height: 55px;
-width: 55px;
-float: left;
-margin-left: 10px;
-margin-bottom: 5px;
-margin-top: 5px;
+  height: 55px;
+  width: 55px;
+  float: left;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 
-}
+  }
 
-header form{
+  header form{
 
-float: right;
-margin-right: 70px;
-margin-bottom: 0px;
-margin-top: 10px;
+  float: right;
+  margin-right: 70px;
+  margin-bottom: 0px;
+  margin-top: 10px;
 
-}
+  }
 
-header input[type="text"]{
+  header input[type="text"]{
 
-background: url(../assets/search.png) right no-repeat;
-background-size: 25px 25px;
-background-color: #303030;
+  background: url(../assets/search.png) right no-repeat;
+  background-size: 25px 25px;
+  background-color: #303030;
 
-border-bottom: 1px solid #fff;
-border-top-style: none;
-border-left-style: none;
-border-right-style: none;
+  border-bottom: 1px solid #fff;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
 
-padding-top: 10px;
-margin-top: 5px;
-
-font-size: 18px;
-color: #fff;
-
-}
-
-.icon{
-
-font-size: 25px;
-margin-right: 10px;
-margin-top: 5px;
-display: inline-block;
-
-}
-
-/* dropdown-menu */
-
-.dropbtn {
-
-    display: inline-block;
-    font-size: 20px;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 18px;
-    cursor: pointer;
-
-}
-
-
-li.dropdown {
-
-    display: inline-block;
-
-}
-
-.dropdown-content {
-
-    display: none;
-    position: absolute;
-    border-bottom-right-radius: 20px;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    width: 230px;
-    z-index: 1;
-
-}
-
-.dropdown-content a {
-
-    color: white;
-    border: 1px solid #707070;
-    background: #303030;
-    padding: 8px 0px;
-    padding-left: 12px;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-
-}
-
-.dropdown-content a:last-child {
-
-    border-bottom-right-radius: 20px;
-
-}
-
-.dropdown-content a:hover {
-
-  border-left: 4px solid #00D8F0;
-
-}
-
-.dropdown-content a:hover .next {
-
-  font-size: 25px;
-
-}
-
-
-.dropdown:hover .dropdown-content {
-
-    display: block;
-
-}
-
-.dropdown-content .fas{
-
-  font-size: 25px;
-  margin-top: 2px;
-  margin-right: 10px;
-
-}
-
-dropdown-content p{
+  padding-top: 10px;
+  margin-top: 5px;
 
   font-size: 18px;
+  color: #fff;
+
+  }
+
+  .icon{
+
+  font-size: 25px;
+  margin-right: 10px;
+  margin-top: 5px;
   display: inline-block;
 
-}
+  }
 
-.next{
+  /* dropdown-menu */
 
-  margin-top: 2px;
-  margin-right: 5px;
-  font-size: 0px;
-  float: right;
+  .dropbtn {
 
-}
+      display: inline-block;
+      font-size: 20px;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 18px;
+      cursor: pointer;
+
+  }
+
+
+  li.dropdown {
+
+      display: inline-block;
+
+  }
+
+  .dropdown-content {
+
+      display: none;
+      position: absolute;
+      border-bottom-right-radius: 20px;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      width: 230px;
+      z-index: 1;
+
+  }
+
+  .dropdown-content a {
+
+      color: white;
+      border: 1px solid #707070;
+      background: #303030;
+      padding: 8px 0px;
+      padding-left: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+
+  }
+
+  .dropdown-content a:last-child {
+
+      border-bottom-right-radius: 20px;
+
+  }
+
+  .dropdown-content a:hover {
+
+    border-left: 4px solid #00D8F0;
+
+  }
+
+  .dropdown-content a:hover .next {
+
+    font-size: 25px;
+
+  }
+
+
+  .dropdown:hover .dropdown-content {
+
+      display: block;
+
+  }
+
+  .dropdown-content .fas{
+
+    font-size: 25px;
+    margin-top: 2px;
+    margin-right: 10px;
+
+  }
+
+  dropdown-content p{
+
+    font-size: 18px;
+    display: inline-block;
+
+  }
+
+  .next{
+
+    margin-top: 2px;
+    margin-right: 5px;
+    font-size: 0px;
+    float: right;
+
+  }
 </style>
