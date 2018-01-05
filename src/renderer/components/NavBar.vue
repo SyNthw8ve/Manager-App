@@ -1,16 +1,16 @@
 <template>
   <header>
   <div id="wrapper">
-    <a v-on:click="changeChart('home')"><img id="logo" src="../assets/logo.png" /></a>
+    <router-link to="/"><img id="logo" src="../assets/logo.png" /></router-link>
         <nav>
             <ul>
               <li>
-                <a v-on:click="changeChart('home')">
+                <router-link to="/">
                   <i class="icon fas fa-home"></i>
                   <p>
                     Home
                   </p>
-                </a>
+                </router-link>
               </li>
               <!-- <li>
                 <a v-on:click="">
@@ -28,30 +28,33 @@
                   </p>
                 </a>
                   <div class="dropdown-content">
-                    <a v-on:click="changeChart('water')">
+
+                    <router-link to="/water">
                       <i class="fas fa-tint" ></i>
                       <p>Water</p>
                       <i class="next fas fa-chevron-right" ></i>
-                    </a>
-                    <a href="./elec.html">
+                    </router-link>
+
+                    <router-link to="/elec">
                       <i class="fas fa-bolt" ></i>
                       <p>Electricity</p>
                       <i class="next fas fa-chevron-right" ></i>
-                    </a>
-                    <a>
+                    </router-link>
+
+                    <router-link to="/gas">
                       <i class="fas fa-cloud" ></i>
                       <p>Gas</p>
                       <i class="next fas fa-chevron-right" ></i>
-                    </a>
+                    </router-link>
                   </div>
               </li>
               <li v-on:mouseenter="spin(true)" v-on:mouseleave="spin(false)">
-                <a  v-on:click="changeChart('home')">
+                <router-link to="/">
                   <i ref="cog" class="icon fas fa-cog" ></i>
                   <p>
                     Config
                   </p>
-                </a>
+                </router-link>
               </li>
             </ul>
         </nav>
@@ -69,12 +72,6 @@
     name: 'home',
 
     methods: {
-
-      changeChart: function (chart) {
-
-        bus.$emit('chartChanged', chart)
-
-      },
 
       spin: function (event) {
 
@@ -146,6 +143,7 @@
   padding-top: 15px;
   padding-left: 23px;
   padding-right: 23px;
+  cursor: pointer;
   width: 120px;
 
   }
@@ -228,6 +226,7 @@
   li.dropdown {
 
       display: inline-block;
+      cursor: pointer;
 
   }
 

@@ -5,14 +5,14 @@
 </template>
 
 <script>
-  import Line from './Charts/Water.js'
+  import Line from './Charts/Gas.js'
 
   export default {
     components: {
 
       'chart': Line
     },
-    name: 'water'
+    name: 'gas'
   }
 </script>
 

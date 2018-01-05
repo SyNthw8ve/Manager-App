@@ -12,7 +12,7 @@ export const bus = new Vue()
 
 new Vue({
   components: { App },
-  router,
+  router: router,
   store,
   template: '<App/>'
 }).$mount('#app')
