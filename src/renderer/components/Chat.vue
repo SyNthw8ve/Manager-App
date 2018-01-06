@@ -2,20 +2,21 @@
 
   <section id="right-display">
 
-        <div id="chat-display">
+        <div ref="display" id="chat-display">
 
           <ul>
+
           </ul>
 
         </div>
 
         <div id="chat-message">
 
-          <i v-on:click="changeClass()" ref="micro" id="micro" class="fas fa-microphone"></i>
+          <form v-on:submit.prevent="post()">
 
-          <div id="vbar"></div>
+            <input ref="msg" type="text" name="msg" placeholder="Talk to Watson!">
 
-          <input type="text" name="msg" placeholder="Talk to Watson!">
+          </form>
 
         </div>
 
@@ -24,24 +25,46 @@
 </template>
 
 <script>
+  import Watson from '../../main/watson.js'
+
   export default {
 
     name: 'chat',
 
     methods: {
 
-      changeClass: function () {
+      post: function () {
 
-        let micro = this.$refs.micro
+        let msg = this.$refs.msg.value;
 
-        if (micro.classList.contains('fa-microphone-slash')) {
+        //let res = Watson.response(msg);
 
-          micro.classList.remove('fa-microphone-slash')
+        let display = this.$refs.display.querySelector('ul');
 
-        } else {
+        console.log(display);
 
-          micro.classList.add('fa-microphone-slash')
-        }
+        let msgToDisplay = document.createElement('span');
+        let icon = document.createElement('img');
+        let li = document.createElement('li');
+        let div = document.createElement('div');
+
+        div.setAttribute('class', 'msg');
+
+        icon.setAttribute('src', 'src/renderer/assets/logo.png');
+        icon.setAttribute('class', 'logo');
+
+        //msgToDisplay.appendChild(icon);
+
+        msgToDisplay.innerHTML = "Hello!"
+
+        div.appendChild(msgToDisplay);
+
+        li.appendChild(div);
+
+        display.appendChild(li)
+
+        //display.appendChild(res)
+
       }
     }
   }
@@ -76,9 +99,8 @@
   #chat-display ul{
 
     list-style: none;
-    margin: 0px;
+    margin: 40px 0;
     padding-left: 0px;
-    margin-top: 30px;
 
   }
 
@@ -123,25 +145,32 @@
 
   }
 
-  #vbar{
+  #chat-message form{
 
-    height: 40px;
-    border-left: 1px solid #D1D1D1;
-    margin-top: 13px;
-    float: left;
-    padding: 0px;
+    margin: auto;
+    margin-left: 5px;
+  }
+
+  .msg {
+
+    padding: 15px 100px;
+    width: 100px;
+    border-radius: 40px;
+    background-color: #6E6B6B;
+    margin-top: 10px;
 
   }
 
-  .fa-microphone{
+  .logo{
 
-    cursor: pointer;
-    padding: 0px 12px;
-    margin-left: 2px;
-    overflow: hidden;
-    color: #707070;
-    margin-top: 16px;
-    font-size: 32px;
+    height: 55px;
+    width: 55px;
+    background-color: #413B3B;
+    position: relative;
+    top: 25px;
+    right: 100px;
+    border-radius: 50%;
+    border: 5px solid #413B3B;
 
   }
 

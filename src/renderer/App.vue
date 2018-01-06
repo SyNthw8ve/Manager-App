@@ -22,7 +22,9 @@
       'chat': Chat,
       'mainContent': MainContent
     },
+    
     name: 'watson-vue'
+
   }
 </script>
 

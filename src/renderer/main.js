@@ -4,6 +4,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import Watson from '../main/watson'
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false
 
@@ -12,7 +14,15 @@ export const bus = new Vue()
 
 new Vue({
   components: { App },
+
+  created: function() {
+
+      Watson.init();
+  },
+
   router: router,
+
   store,
+
   template: '<App/>'
 }).$mount('#app')

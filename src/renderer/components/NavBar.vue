@@ -12,14 +12,6 @@
                   </p>
                 </router-link>
               </li>
-              <!-- <li>
-                <a v-on:click="">
-                  <i class="icon fas fa-list-ul" ></i>
-                  <p>
-                    Manager
-                  </p>
-                </a>
-              </li> -->
               <li class="dropdown">
                 <a class="dropbtn">
                   <i class="icon fas fa-list-ul" ></i>
@@ -46,6 +38,7 @@
                       <p>Gas</p>
                       <i class="next fas fa-chevron-right" ></i>
                     </router-link>
+
                   </div>
               </li>
               <li v-on:mouseenter="spin(true)" v-on:mouseleave="spin(false)">
