@@ -14,7 +14,7 @@
     data () {
       return {
 
-        component: 'home'
+        
       }
     },
 
@@ -28,9 +28,10 @@
   #left-display{
 
     width: 76.7%;
-    height: 640px;
+    height: 91%;
     margin: 0;
     overflow-y: auto;
+    
   }
 
 </style>

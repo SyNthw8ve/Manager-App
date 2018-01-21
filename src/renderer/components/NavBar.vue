@@ -14,7 +14,7 @@
               </li>
               <li class="dropdown">
                 <a class="dropbtn">
-                  <i class="icon fas fa-list-ul" ></i>
+                  <i class="icon fas fa-chart-area"></i>
                   <p>
                     Manager
                   </p>
@@ -34,7 +34,7 @@
                     </router-link>
 
                     <router-link to="/gas">
-                      <i class="fas fa-cloud" ></i>
+                      <i class="fas fa-fire"></i>
                       <p>Gas</p>
                       <i class="next fas fa-chevron-right" ></i>
                     </router-link>
@@ -59,9 +59,11 @@
 </template>
 
 <script>
+
   import { bus } from '../main'
 
   export default {
+
     name: 'home',
 
     methods: {
@@ -133,10 +135,11 @@
 
   header nav li{
 
-  padding-top: 15px;
+  padding-top: 11px;
   padding-left: 23px;
   padding-right: 23px;
   cursor: pointer;
+  border-top: 4px solid transparent;
   width: 120px;
 
   }
@@ -206,51 +209,53 @@
 
   .dropbtn {
 
-      display: inline-block;
-      font-size: 20px;
-      color: white;
-      text-decoration: none;
-      margin-bottom: 18px;
-      cursor: pointer;
+    display: inline-block;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 18px;
+    cursor: pointer;
 
   }
 
 
   li.dropdown {
 
-      display: inline-block;
-      cursor: pointer;
+    display: inline-block;
+    cursor: pointer;
 
   }
 
   .dropdown-content {
 
-      display: none;
-      position: absolute;
-      border-bottom-right-radius: 20px;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      width: 230px;
-      z-index: 1;
+    display: none;
+    position: absolute;
+    border-bottom-right-radius: 20px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    width: 230px;
+    z-index: 1;
 
   }
 
   .dropdown-content a {
 
-      color: white;
-      border: 1px solid #707070;
-      background: #303030;
-      padding: 8px 0px;
-      padding-left: 12px;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
+    color: white;
+    border: 1px solid #707070;
+    border-left: 4px solid #707070;
+    background: #303030;
+    padding: 6px 0px;
+    padding-left: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
 
   }
 
   .dropdown-content a:last-child {
 
-      border-bottom-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+      
 
   }
 

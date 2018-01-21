@@ -22,7 +22,7 @@
       'chat': Chat,
       'mainContent': MainContent
     },
-    
+
     name: 'watson-vue'
 
   }
@@ -33,23 +33,26 @@
   html{
 
     height: 100%;
+    width:100%;
   }
 
   #app{
 
     width: 100%;
-    max-height: 700px;
+    height: 100%;
 
   }
 
   body {
 
-      background: #404040;
-      height: 100%;
-      font-family: Roboto;
-      margin: 0;
-      overflow: hidden;
-      }
+    height: 100%;
+    width: 100%;
+    font-family: Roboto;
+    background: #404040;
+    margin: 0px;
+    overflow: hidden;
+
+  }
 
   .flex-container{
 
@@ -75,6 +78,34 @@
   {
   	border-radius: 10px;
   	background-color: #212733;
+  }
+
+  .to-animate {
+
+    animation: downscale 0.5s ease 0s 1 normal forwards;
+
+  }
+
+  .to-animate:hover {
+
+    animation: upscale 0.5s ease 0s 1 normal forwards;
+
+  }
+
+  @keyframes downscale {
+
+    from {transform: scale(1.1)}
+
+    to {transform: scale(1)}
+    
+  }
+
+  @keyframes upscale {
+
+    from {transform: scale(1)}
+
+    to {transform: scale(1.1)}
+    
   }
 
 </style>

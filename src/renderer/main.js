@@ -13,16 +13,19 @@ Vue.config.productionTip = false
 export const bus = new Vue()
 
 new Vue({
+
   components: { App },
 
   created: function() {
 
       Watson.init();
+      this.$store.commit('initDB');
   },
 
   router: router,
 
-  store,
+  store: store,
 
   template: '<App/>'
+
 }).$mount('#app')

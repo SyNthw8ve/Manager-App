@@ -16,6 +16,7 @@ export default{
   init: function () {
 
     bot.loadFile('src/main/watson.rive', this.fileRead, this.fileError );
+    console.log("Loaded")
 
   },
 

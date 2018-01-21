@@ -25,6 +25,7 @@
 </template>
 
 <script>
+
   import Watson from '../../main/watson.js'
 
   export default {
@@ -35,7 +36,7 @@
 
       post: function () {
 
-        let msg = this.$refs.msg.value;
+       /* let msg = this.$refs.msg.value;
 
         //let res = Watson.response(msg);
 
@@ -63,7 +64,7 @@
 
         display.appendChild(li)
 
-        //display.appendChild(res)
+        //display.appendChild(res)*/
 
       }
     }
@@ -75,11 +76,12 @@
   #right-display{
 
     width: 23.3%;
-    height: 640px;
+    height: 91%;
     background-color: #4A4A4A;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
     margin: 0px;
+    overflow-y: auto;
 
   }
 
@@ -87,7 +89,7 @@
 
     width: 95%;
     height: 76.3%;
-    background: #413B3B;
+    background: #282828;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
     overflow-y: auto;
@@ -112,7 +114,7 @@
 
   #chat-message input[type="text"]{
 
-    background: #413B3B;
+    background: #282828;
     border-style: none;
     padding: 5px 0px;
     margin-left: 10px;
@@ -123,7 +125,7 @@
 
   #chat-message{
 
-    background: #413B3B;
+    background: #282828;;
     display: flex;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
