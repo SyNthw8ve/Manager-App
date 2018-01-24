@@ -80,32 +80,6 @@
   	background-color: #212733;
   }
 
-  .to-animate {
-
-    animation: downscale 0.5s ease 0s 1 normal forwards;
-
-  }
-
-  .to-animate:hover {
-
-    animation: upscale 0.5s ease 0s 1 normal forwards;
-
-  }
-
-  @keyframes downscale {
-
-    from {transform: scale(1.1)}
-
-    to {transform: scale(1)}
-    
-  }
-
-  @keyframes upscale {
-
-    from {transform: scale(1)}
-
-    to {transform: scale(1.1)}
-    
-  }
+  
 
 </style>

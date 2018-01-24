@@ -41,7 +41,7 @@
 
                   </div>
               </li>
-              <li v-on:mouseenter="spin(true)" v-on:mouseleave="spin(false)">
+              <li >
                 <router-link to="/">
                   <i ref="cog" class="icon fas fa-cog" ></i>
                   <p>
@@ -153,6 +153,7 @@
   header nav a{
 
   text-decoration: none;
+  font-weight: 300;
   color: #fff;
 
   }
@@ -270,7 +271,6 @@
     font-size: 25px;
 
   }
-
 
   .dropdown:hover .dropdown-content {
 

@@ -6,23 +6,23 @@
   <div class="form-wrapper">
       <form>
         <i class="fas fa-fire"></i>
-        <div class="to-animate">
+        <div>
           <input v-model="cost" type="text" name="cost" placeholder="€ per cubic meter">
           <i class="fas fa-euro-sign"></i>
         </div>
-        <div class="to-animate">
+        <div>
           <input v-model="number_showers" type="text" name="shower" placeholder="Nº of showers per day">
           <i class="fas fa-shower"></i>
         </div>
-        <div class="to-animate">
+        <div>
           <input v-model="mean_time_shower" type="text" name="mean-showers" placeholder="Average time of shower">
           <i class="far fa-clock"></i>
         </div>
-        <div class="to-animate">
+        <div>
           <input v-model="number_other_sources" type="text" name="outher-sources" placeholder="Nº of other sources of usage">
           <i class="fas fa-wrench"></i>
         </div>
-        <div class="to-animate">
+        <div>
           <input v-model="outher_mean_time" type="text" name="mean-other" placeholder="Average time of use">
           <i class="far fa-clock"></i>
         </div>
@@ -94,7 +94,7 @@
           field_3: Number(this.number_other_sources),
           field_4: Number(this.outher_mean_time)
 
-        }) 
+        })
       }
     },
 
@@ -195,6 +195,5 @@
     
   }
 
-  
-  
+
 </style>

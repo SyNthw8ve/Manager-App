@@ -16,10 +16,10 @@ new Vue({
 
   components: { App },
 
-  created: function() {
+  created() {
 
-      Watson.init();
-      this.$store.commit('initDB');
+      //Watson.init();
+      
   },
 
   router: router,

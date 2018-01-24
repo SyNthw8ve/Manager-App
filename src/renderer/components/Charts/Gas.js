@@ -19,7 +19,7 @@ export default({
 
   mounted () {
 
-    this.gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 450)
+    /*this.gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 450)
 
     this.gradient.addColorStop(0, 'rgba(255, 0, 102, 0.9)')
     this.gradient.addColorStop(0.5, 'rgba(255, 0, 102, 0.25)')
@@ -27,7 +27,7 @@ export default({
 
     this.chartData.datasets[0].backgroundColor = this.gradient;
 
-    this.renderChart(this.chartData, {responsive: true, maintainAspectRatio: false})
+    this.renderChart(this.chartData, {responsive: true, maintainAspectRatio: false})*/
 
   }
 })
