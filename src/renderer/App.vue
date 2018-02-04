@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <navbar></navbar>
-    <div class="flex-container">
+    <mainContent></mainContent>
+    <!-- <div class="flex-container">
       <mainContent></mainContent>
       <chat></chat>
-    </div>
+    </div> -->
   </div>
 </template>
 

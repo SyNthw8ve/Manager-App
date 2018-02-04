@@ -38,7 +38,6 @@
                       <p>Gas</p>
                       <i class="next fas fa-chevron-right" ></i>
                     </router-link>
-
                   </div>
               </li>
               <li >
@@ -51,9 +50,6 @@
               </li>
             </ul>
         </nav>
-        <form>
-          <input type="text" name="search" placeholder="Search">
-        </form>
   </div>
   </header>
 </template>
@@ -99,7 +95,7 @@
 
   header{
 
-  background: #303030;
+  background: #191919;
 
   }
 
@@ -160,40 +156,11 @@
 
   #logo{
 
-  height: 55px;
   width: 55px;
   float: left;
-  margin-left: 10px;
+  margin-left: 15px;
   margin-bottom: 5px;
-  margin-top: 5px;
-
-  }
-
-  header form{
-
-  float: right;
-  margin-right: 70px;
-  margin-bottom: 0px;
-  margin-top: 10px;
-
-  }
-
-  header input[type="text"]{
-
-  background: url(../assets/search.png) right no-repeat;
-  background-size: 25px 25px;
-  background-color: #303030;
-
-  border-bottom: 1px solid #fff;
-  border-top-style: none;
-  border-left-style: none;
-  border-right-style: none;
-
-  padding-top: 10px;
-  margin-top: 5px;
-
-  font-size: 18px;
-  color: #fff;
+  margin-top: 13px;
 
   }
 

@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import Firebase from 'Firebase'
-import 'Firebase/firestore'
+import firebase from 'Firebase'
+require('Firebase/firestore')
 import config from '../components/database/firebaseConfig'
 
 import modules from './modules' 
 
 Vue.use(Vuex)
 
-const firebaseApp = Firebase.initializeApp(config)
+let firebaseApp = firebase.initializeApp(config)
+
+const fireStore = firebaseApp.firestore();
 
 export default new Vuex.Store({
 
@@ -17,77 +19,59 @@ export default new Vuex.Store({
 
   state: { 
     
-    db: firebaseApp.firestore(),
+    db: fireStore,
+
+    showModal: false,
   
-    waterDataCollection : {
+    water: {
 
-      consts : {
+      writeBack: [],
 
-        cost: null,
+      weekAffairs: {
 
-        number_showers: null,
+        'sunday': { day: 'sunday', affairs: [], type: 'water' },
+        'monday': { day: 'monday', affairs: [], type: 'water'},
+        'thuesday': { day: 'thuesday', affairs: [], type: 'water' },
+        'wednesday': { day: 'wednesday', affairs: [], type: 'water' },
+        'thursday': { day: 'thursday', affairs: [], type: 'water' },
+        'friday': { day: 'friday', affairs: [], type: 'water' },
+        'saturday': { day: 'saturday', affairs: [], type: 'water' }
 
-        mean_time_shower: null,
-
-        number_other_sources: null,
-
-        outher_mean_time: null,
-
-        last_value: null
-
-      },
-
-      datacollection: {
-
-        labels: [],
-        datasets: [{
-
-          label: 'Water',
-          backgroundColor: this.gradient,
-          borderColor: '#00e7ff',
-          data: [],
-          pointRadius: 6,
-          pointBackgroundColor: '#00e7ff',
-          pointHoverRadius: 8,
-          pointBorderColor: '#000000'
-
-        }]
       }
+      
     },
     
     elecDataCollection : {
 
-      consts : {
+      writeBack: [],
 
-        cost: null,
+      weekAffairs: {
 
-        number_devices: null,
+        'sunday': { day: 'sunday', affairs: [] },
+        'monday': { day: 'monday', affairs: [] },
+        'thuesday': { day: 'thuesday', affairs: [] },
+        'wednesday': { day: 'wednesday', affairs: [] },
+        'thursday': { day: 'thursday', affairs: [] },
+        'friday': { day: 'friday', affairs: [] },
+        'saturday': { day: 'saturday', affairs: [] },
 
-        mean_time_device: null,
+      }
+    },
 
-        number_other_sources: null,
+    gasDataCollection : {
 
-        outher_mean_time: null,
+      writeBack: [],
 
-        last_value: null
+      weekAffairs: {
 
-      },
-
-      datacollection: {
-
-        labels: [],
-        datasets: [{
-
-          label: 'Electricity',
-          backgroundColor: this.gradient,
-          borderColor: '#ffdd00',
-          data: [],
-          pointRadius: 6,
-          pointBackgroundColor: '#ffdd00',
-          pointHoverRadius: 8,
-          pointBorderColor: '#000000'
-
-        }]
+        'sunday': { day: 'sunday', affairs: [] },
+        'monday': { day: 'monday', affairs: [] },
+        'thuesday': { day: 'thuesday', affairs: [] },
+        'wednesday': { day: 'wednesday', affairs: [] },
+        'thursday': { day: 'thursday', affairs: [] },
+        'friday': { day: 'friday', affairs: [] },
+        'saturday': { day: 'saturday', affairs: [] }
+        
       }
     },
     
@@ -95,64 +79,181 @@ export default new Vuex.Store({
 
   getters: {
 
+    
+
   },
 
   mutations: {
 
-    setConsts(state, payload) {
-
-      if(payload.type === 'water'){
-
-        state.waterDataCollection.consts = payload.consts;
-
-      } else if (payload.type === 'elec') {
-
-        state.elecDataCollection.consts = payload.consts;
-      }
-    },
-
-    setData(state, payload) {
+    updateWriteBack(state, payload) {
 
       if(payload.type === 'water') {
 
-        state.waterDataCollection.datacollection.datasets[0].data = payload.data;
+        state.water.writeBack.push(payload.data)
 
       } else if (payload.type === 'elec') {
 
-        state.elecDataCollection.datacollection.datasets[0].data = payload.data;
+        state.elecDataCollection.writeBack.push(payload.data);
+
+      } else if (payload.type === 'gas') {
+
+        state.gasDataCollection.writeBack.push(payload.data);
       }
     },
 
-    setLabels(state, payload) {
+    clearWriteBack(state, payload) {
 
       if(payload.type === 'water') {
 
-        state.waterDataCollection.datacollection.labels = payload.data;
+        state.water.writeBack = [];
 
       } else if (payload.type === 'elec') {
 
-        state.elecDataCollection.datacollection.labels = payload.data;
+        state.elecDataCollection.writeBack = [];
+
+      } else if (payload.type === 'gas') {
+
+        state.gasDataCollection.writeBack = [];
       }
-    }
+    },
+
+    showModal(state, payload) {
+
+      state.showModal = payload.modal;
+
+    },
+
+    addAffair(state, payload) {
+
+      if(payload.type === 'water') {
+
+        state.water.weekAffairs[payload.day].affairs.push(payload.data)
+
+      } else if (payload.type === 'elec') {
+
+        state.elecDataCollection.weekAffairs[payload.day].affairs.push(payload.data)
+
+      } else if (payload.type === 'gas') {
+
+        state.gasDataCollection.weekAffairs[payload.day].affairs.push(payload.data)
+      }
+    },
+
+    removeAffair(state, payload) {
+
+      if(payload.type === 'water') {
+
+        state.water.weekAffairs[payload.day].affairs = state.water.weekAffairs[payload.day].affairs.filter( affair => (
+          
+          affair.action !== payload.affair.action || affair.duration !== payload.affair.duration || affair.times !== payload.affair.times))
+
+      } else if (payload.type === 'elec') {
+
+        state.elecDataCollection.weekAffairs[payload.day].affairs = state.elecDataCollection.weekAffairs[payload.day].affairs.filter( affair => (
+          
+          affair.action !== payload.affair.action || affair.duration !== payload.affair.duration || affair.times !== payload.affair.times))
+
+      } else if (payload.type === 'gas') {
+
+        state.gasDataCollection.weekAffairs[payload.day].affairs = state.gasDataCollection.weekAffairs[payload.day].affairs.filter( affair => (
+          
+          affair.action !== payload.affair.action || affair.duration !== payload.affair.duration || affair.times !== payload.affair.times))
+      }
+    },
+
+    loadAffair(state, payload) {
+
+      if(payload.type === 'water') {
+
+        state.water.weekAffairs[payload.data.day] = payload.data
+
+      } else if (payload.type === 'elec') {
+
+        state.elecDataCollection.weekAffairs[payload.data.day] = payload.data
+
+      } else if (payload.type === 'gas') {
+
+        state.gasDataCollection.weekAffairs[payload.data.day] = payload.data
+      }
+    },
+
+    clearAffairs(state, payload) {
+
+      if(payload.type === 'water') {
+
+        let week = state.water.weekAffairs
+
+        Object.keys(week).forEach( (day) => {
+
+          week[day].affairs = []
+  
+        })
+
+      } else if (payload.type === 'elec') {
+
+        let week = state.elecDataCollection.weekAffairs
+
+        Object.keys(week).forEach( (day) => {
+
+          week[day].affairs = []
+  
+        })
+
+      } else if (payload.type === 'gas') {
+
+        let week = state.gasDataCollection.weekAffairs
+
+        Object.keys(week).forEach( (day) => {
+
+          week[day].affairs = []
+  
+        })
+      }
+    },
+
+
   },
 
   actions: {
 
-    setConsts(context, payload) {
+    updateWriteBack(context, payload) {
 
-      context.commit('setConsts', payload)
+      context.commit('updateWriteBack', payload)
 
     },
 
-    setData(context, payload) {
+    clearWriteBack(context, payload){
 
-      context.commit('setData', payload)
+      context.commit('clearWriteBack', payload)
+
     },
 
-    setLabels(context, payload) {
+    showModal( context, payload) {
 
-      context.commit('setLabels', payload)
+      context.commit('showModal', payload)
+
     },
+
+    addAffair(context, payload) {
+
+      context.commit('addAffair', payload)
+
+    },
+
+    removeAffair(context, payload) {
+
+      context.commit('removeAffair', payload)
+    },
+
+    loadAffair(context, payload){
+
+      context.commit('loadAffair', payload)
+    },
+
+    clearAffairs(context, payload){
+
+      context.commit('clearAffairs', payload)
+    }
 
   }
 })

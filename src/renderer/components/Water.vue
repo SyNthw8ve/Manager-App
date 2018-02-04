@@ -1,35 +1,18 @@
 <template>
   <div>
     <div v-if="loaded">
-      <div class="chart-wrapper">
-        <chart :chart-data="datacollection" v-on:loaded="load" class="chart"></chart>
+      <div class="chart-grid">
+          <div id="line" class="chart-wrapper">
+            <chart :chart-data="dataCollection" class="chart"></chart>
+          </div>
+          <div class="chart-wrapper">
+            <bar :chart-data="weekData" class="chart"></bar>
+          </div>
+          <div class="chart-wrapper">
+            <doughnut :chart-data="actionData" class="chart"></doughnut>
+          </div>
       </div>
-      <div class="form-wrapper">
-        <form>
-          <i class="fas fa-tint"></i>
-          <div >
-            <input v-model="cost" type="text" name="cost" placeholder="€ per liter">
-            <i class="fas fa-euro-sign"></i>
-          </div>
-          <div >
-            <input v-model="number_showers" type="text" name="shower" placeholder="Nº of showers per day">
-            <i class="fas fa-shower"></i>
-          </div>
-          <div >
-            <input v-model="mean_time_shower" type="text" name="mean-showers" placeholder="Average time of shower">
-            <i class="far fa-clock"></i>
-          </div>
-          <div >
-            <input v-model="number_other_sources" type="text" name="outher-sources" placeholder="Nº of other sources of usage">
-            <i class="fas fa-wrench"></i>
-          </div>
-          <div >
-            <input v-model="outher_mean_time" type="text" name="mean-other" placeholder="Average time of use">
-            <i class="far fa-clock"></i>
-          </div>
-          <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
-        </form>
-      </div>
+      <calendar :weekAffairs="weekAffairs"></calendar>
     </div>
     <div class="loading" v-if="!loaded">
       <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
@@ -39,15 +22,25 @@
 
 <script>
 
-  import Line from './Charts/Water.js'
-  import { error } from 'util';
-  import { setInterval } from 'timers';
+  import Line from './Charts/Line.js'
+  import Bar from './Charts/Bar.js'
+  import Doughnut from './Charts/Circle.js'
+
+  import Modal from './Modals/Modal.vue'
+  import Calendar from './Calendar.vue'
+
+  import { error } from 'util'
+  import { setInterval, setTimeout } from 'timers'
 
   export default {
     
     components: {
 
-      'chart': Line
+      'chart': Line,
+      'bar': Bar,
+      'modal': Modal,
+      'doughnut': Doughnut,
+      'calendar': Calendar
 
     },
 
@@ -55,160 +48,335 @@
 
       return {
 
-        cost: null,
+        consts: {
 
-        number_showers: null,
+          cost: null,
 
-        mean_time_shower: null,
+          liters_per_min: null,
 
-        number_other_sources: null,
+        },
 
-        outher_mean_time: null,
+        dataCollection: {
 
-        loaded: true,
+          labels: [],
+          datasets: [{
 
-        last_value: 0,
+            label: 'Water',
+            backgroundColor: 'rgba(0, 231, 255, 0.05)',
+            borderColor: 'rgba(0, 231, 255, 0.7)',
+            data: [],
+            pointRadius: 6,
+            pointBackgroundColor: '#00e7ff',
+            pointHoverRadius: 8,
+            pointBorderColor: '#000000'
 
-        datacollection: {}
-      }
+          }]
+        },
 
-    },
+        weekData: {
+          
+          labels: ['Sunday', 'Monday', 'Thuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          datasets: [{
+
+            label: 'Daily Cost',
+            data: [],
+            backgroundColor: 'rgba(0, 231, 255, 0.7)',
+
+          },
+          {
+
+            label: 'Liters Spent (m^3)',
+            data: [],
+            backgroundColor: 'rgba(0, 196, 176, 0.7)',
+
+          }],
+        },
+
+        actionData: {
+
+          labels: [],
+
+          datasets: [{
+
+              label: 'Action Costs',
+              backgroundColor: [],
+              data: []
+
+            }]
+
+        },
+
+      loaded: false,
+
+      interval: null,
+
+    }
+
+  },
 
     created() {
     
-      let db = this.$store.state.db;
+      let db = this.$store.state.db
 
-      db.collection('consts').doc('Water').get().then( doc => {
+      let weekAffairs = this.$store.state.water.weekAffairs
 
-        let data = doc.data();
+      this.retreiveData(db);
 
-        this.$store.dispatch('setConsts', {
+      this.retreiveConsts(db);
 
-          type: 'water',
-          consts: {
+      this.retreiveAffairs(db, weekAffairs);
 
-            cost: data.cost,
-            number_showers: data.field_1,
-            mean_time_shower: data.field_2,
-            number_other_sources: data.field_3,
-            outher_mean_time: data.field_4,
-            last_value: data.last_value
+      //this.start();
 
-          }
-        })
-
-        this.cost = data.cost
-
-        this.number_showers = data.field_1
-
-        this.mean_time_shower = data.field_2
-
-        this.number_other_sources = data.field_3
-
-        this.outher_mean_time = data.field_4
-
-      })
-
-      /*setInterval( () => {
-
-        this.submitValue();
-        this.updateChart();
-
-      }, 5000)*/
     },
 
+    beforeDestroy() {
+
+      let db = this.$store.state.db
+
+      let writeBack = this.$store.state.water.writeBack
+
+      let weekAffairs = this.$store.state.water.weekAffairs
+
+      let consts = {
+
+          cost: Number(this.consts.cost),
+          field_1: Number(this.consts.liters_per_min),
+
+      }
+
+      db.collection('consts').doc('Water').set(consts)
+
+      this.releaseWriteBack(writeBack, db);
+
+      this.releaseAffairs(weekAffairs, db);
+
+      window.clearInterval(this.interval)
+
+    },
 
     methods: {
 
-      submit: function(){
+      start() {
+
+        this.interval = window.setInterval( () => { 
+          
+          this.updateChart() 
+          
+        }, 10000)
+
+      },
+
+      submit() {
 
         let db = this.$store.state.db;
 
         let consts = {
 
-          cost: Number(this.cost),
-          field_1: Number(this.number_showers),
-          field_2: Number(this.mean_time_shower),
-          field_3: Number(this.number_other_sources),
-          field_4: Number(this.outher_mean_time),
-          last_value: this.last_value || 0
+          cost: Number(this.consts.cost),
+          field_1: Number(this.consts.liters_per_min)
 
         }
 
         db.collection('consts').doc('Water').set(consts)
 
-        this.$store.dispatch('setConsts', {
-
-          type: 'water',
-          consts: consts
-
-        })
-
       },
 
-      submitValue: function(){
-
-        let db = this.$store.state.db;
+      updateChart() {
 
         let date = new Date();
 
-        let start = Date.now();
-
-        db.collection('Data').doc(`${start}`).set({
+        let values = {
 
           type: 'water',
+
+          day: date.getDay(),
+
           date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-          value: this.cost*(this.number_showers*this.mean_time_shower + this.number_other_sources*this.outher_mean_time) + this.last_value
 
-        })
+          value: this.getValue(date.getDay())
 
-        this.last_value = this.cost*(this.number_showers*this.mean_time_shower + this.number_other_sources*this.outher_mean_time) + this.last_value
+        }
+
+        let payload = { type: 'water', data: { doc:`${Date.now()}` , values } }
+
+        let chartData = {data: this.dataCollection.datasets[0].data, labels: this.dataCollection.labels} 
+
+        chartData.labels.push(values.date)
+        chartData.data.push(values.value)
+        
+        this.$store.dispatch('updateWriteBack', payload)
+
+        this.dataCollection = {
+
+          labels: chartData.labels,
+          datasets: [{
+
+            label: 'Water',
+            backgroundColor: 'rgba(0, 231, 255, 0.05)',
+            borderColor: 'rgba(0, 231, 255, 0.7)',
+            data: chartData.data,
+            pointRadius: 6,
+            pointBackgroundColor: '#00e7ff',
+            pointHoverRadius: 8,
+            pointBorderColor: '#000000'
+
+          }]
+        }
 
       },
 
-      updateChart: function() {
+      getValue(day) {
 
-        let db = this.$store.state.db;
+        let weekAffairs = this.$store.state.water.weekAffairs
+
+        let affairs = weekAffairs[Object.keys(weekAffairs)[day]].affairs
+
+        let durations = affairs.reduce( (prev, current) => {
+
+          return prev + Number(current.duration)*Number(current.times)
+
+        }, 0)
+
+        return durations*this.consts.liters_per_min*this.consts.cost/1000
+      },
+
+      retreiveData(db) {
 
         db.collection('Data').where('type', '==', 'water').get().then( querySnapshot => {
-
-          let labels = [];
-          let data = [];
 
           querySnapshot.forEach( doc => {
 
             let date = doc.data().date;
             let value = doc.data().value;
 
-            labels.push(date);
-            data.push(value);
+            this.dataCollection.labels.push(date);
+            this.dataCollection.datasets[0].data.push(value);
             
           });
 
-          this.$store.dispatch('setData', {
-
-          type: 'water',
-          data: data
-
-          })
-
-          this.$store.dispatch('setLabels', {
-
-            type: 'water',
-            data: labels
-
-          })
-          
         }).catch( error => console.log(error))
 
       },
 
-      load() {
+      retreiveConsts(db) {
 
-        console.log('hello')
+        db.collection('consts').doc('Water').get().then( doc => {
 
-        this.loaded = true;
+          let data = doc.data();
+
+          this.consts = {
+
+              cost: data.cost,
+              liters_per_min: data.field_1,
+
+          }
+        })
+      },
+
+      retreiveAffairs(db, weekAffairs) {
+
+        db.collection('Affairs').where('type', '==', 'water').get().then( querySnapshot => {
+
+          querySnapshot.forEach( doc => {
+
+            let data = doc.data()
+
+            this.$store.dispatch('loadAffair', {type: 'water', data: data})
+
+            this.loaded = true
+          })
+
+          Object.keys(weekAffairs).forEach( (day, index) => {
+
+            let value = this.getValue(index);
+
+            this.weekData.datasets[0].data.push(value.toFixed(2))
+            this.weekData.datasets[1].data.push( (value/this.consts.cost).toFixed(2) )
+
+          })
+
+          this.actionsCost(this.$store.state.water.weekAffairs);
+
+        })
+      },
+
+      releaseWriteBack(writeBack, db) {
+
+        writeBack.forEach( (data) => {
+
+          db.collection('Data').doc(data.doc).set({
+
+            type: data.values.type,
+            date: data.values.date,
+            value: data.values.value,
+            day: data.values.day
+
+          }).catch( (error) => console.log(error) )
+
+        })
+
+        this.$store.dispatch('clearWriteBack', {type: 'water'})
+      },
+
+      releaseAffairs(weekAffairs, db) {
+
+        Object.keys(weekAffairs).forEach( (day) => {
+
+          db.collection('Affairs').doc(day).set(weekAffairs[day])
+
+        })
+
+        this.$store.dispatch('clearAffairs', {type: 'water'})
+      },
+
+      actionsCost(weekAffairs) {
+
+        let result = {}
+
+        Object.keys(weekAffairs).forEach( (day) => {
+
+          weekAffairs[day].affairs.forEach( affair => {
+
+            let value = Number(affair.duration)*Number(affair.times)*this.consts.liters_per_min*this.consts.cost/1000
+
+              if(result[affair.action] === undefined) {
+
+                result[affair.action] = value
+
+              } else {
+
+                let v = Number(result[affair.action]) + value
+
+                result[affair.action] = v
+
+              }
+
+          })
+
+        })
+
+        Object.keys(result).forEach( (action, index) => {
+
+          this.actionData.labels.push(action)
+
+          this.actionData.datasets[0].data.push(result[action])
+
+          this.actionData.datasets[0].backgroundColor.push(`rgb(0, 231,  ${255 - 30*(index)})`)
+        })
+
+      },
+
+    },
+
+    computed: {
+
+      weekAffairs() {
+
+        return this.$store.state.water.weekAffairs
+
       }
+
     },
 
     name: 'water'
@@ -235,12 +403,25 @@
     position: inherit;
     font-size: 60px;
     margin: auto;
+    color: #a5a5a5;
 
   }
 
   .chart-wrapper {
 
     width: 100%;
+    
+  }
+
+  .chart-grid {
+
+    width: 100%;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, auto);
+    grid-gap: 20px 0px;
+    justify-items: center;
 
   }
 
@@ -249,84 +430,14 @@
     width: 95%;
     background: #191919;
     box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
-    margin: 20px auto;
+    margin: 0 auto;
 
   }
 
-  .form-wrapper {
+  #line {
 
-    background-color: #191919;
-    margin: 20px 25px;
-    display: flex;
-    align-content: center;
-    width: 40%;
-    height: 40%;
-
-  }
-
-  .form-wrapper input {
-
-    margin: 0px auto;
-    padding: 10px 50px;
-    width: 200px;
-    color: white;
-    font-size: 14px;
-    display: block;
-    background-color: #282828;
-    box-shadow: 0px 0px 20px 2px rgba(0,0,0,0.75);
-    border: none;
-
-  }
-
-  .form-wrapper form input:focus {
-
-    outline: none;
+    grid-column: 1/3;
     
   }
-
-  .form-wrapper form {
-
-    margin: 20px auto;
-    display: inline-block;
-
-  }
-
-  .fas, .far {
-
-    position: relative;
-    top: -28px;
-    left: 14px;
-    margin: 0;
-    color: #a5a5a5;
-    font-size: 20px;
-    padding-right: 8px;
-
-  }
-
-  #submit {
-
-    color: #a5a5a5;
-    cursor: pointer;
-    box-shadow: 9px 11px 14px 0px rgba(0,0,0,0.75);
-
-  }
-
-  #submit:hover {
-
-    background-color: #191919;
-
-  }
-
-  .fa-tint {
-
-    position: static;
-    margin: 15px auto;
-    text-align: center;
-    display: block;
-    font-size: 40px;
-    color: #00e7ff;
-    
-  }
-
 
 </style>

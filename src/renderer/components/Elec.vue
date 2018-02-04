@@ -2,43 +2,123 @@
 <div>
   <div v-if="loaded">
     <div class="chart-wrapper">
-      <chart :chart-data="datacollection" class="chart"></chart>
+      <chart :chart-data="dataCollection" class="chart"></chart>
     </div>
-    <div class="form-wrapper">
-        <form>
-          <i class="fas fa-bolt" ></i>
-          <div>
-            <input v-model="cost" type="text" name="cost" placeholder="€ per Kw/h">
-            <i class="fas fa-euro-sign"></i>
+    <div class="calendar">
+      <div class="day">
+          <form>
+            <i class="fas fa-bolt" ></i>
+            <div>
+              <input v-model="consts.cost" type="text" name="cost" placeholder="€ per Kw/h">
+              <i class="fas fa-euro-sign"></i>
+            </div>
+            <div >
+              <input v-model="consts.number_devices" type="text" name="kW" placeholder="Nº of devices">
+              <i class="fas fa-microchip"></i>
+            </div>
+            <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
+          </form>
+        </div>
+      <div class="day">
+            <span>Monday <i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.monday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('monday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
           </div>
-          <div >
-            <input v-model="number_devices" type="text" name="shower" placeholder="Nº of devices">
-            <i class="fas fa-microchip"></i>
+          <div class="day">
+            <span>Thuesday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.thuesday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('thuesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
           </div>
-          <div>
-            <input v-model="mean_time_device" type="text" name="mean-showers" placeholder="Average time of use">
-            <i class="far fa-clock"></i>
+          <div class="day">
+            <span>Wednesday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.wednesday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('wednesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
           </div>
-          <div >
-            <input v-model="number_other_sources" type="text" name="outher-sources" placeholder="Nº of other sources of usage">
-            <i class="fas fa-wrench"></i>
+          <div class="day">
+            <span>Thursday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.thursday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('thursday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
           </div>
-          <div >
-            <input v-model="outher_mean_time" type="text" name="mean-other" placeholder="Average time of use">
-            <i class="far fa-clock"></i>
+          <div class="day">
+            <span>Friday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.friday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('friday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
           </div>
-          <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
-        </form>
-      </div>
-    </div>
+          <div class="day">
+            <span>Saturday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.saturday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('saturday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
+          </div>
+          <div class="day">
+            <span>Sunday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+              <ul>
+                <li v-for="affair in weekAffairs.sunday.affairs"> 
+                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                    <i @click="remove('sunday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                  </span> 
+                </li>
+              </ul>    
+            </div>
+          </div>
+        </div>
+        <modal :activeData="activeData"></modal>
+        <div class="chart-wrapper">
+          <bar :chart-data="weekData" class="chart"></bar>
+        </div>
+  </div>
   <div class="loading" v-if="!loaded">
-        <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
+    <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
   </div>
 </div>
 </template>
 
 <script>
-  import Line from './Charts/Elec.js'
+  import Line from './Charts/Line.js'
+  import Modal from './Modals/Modal.vue'
+  import Bar from './Charts/Bar'
 
   export default {
 
@@ -46,78 +126,125 @@
 
       return {
 
-        cost: null,
+        consts: {
 
-        number_devices: null,
+          cost: null,
 
-        mean_time_device: null,
+          number_devices: null,
 
-        number_other_sources: null,
+        },
 
-        outher_mean_time: null,
+        dataCollection: {
 
-        last_value: null,
+          labels: [],
+          datasets: [{
+
+            label: 'Electricity',
+            backgroundColor: 'rgba(255, 221, 0, 0.05)',
+            borderColor: 'rgba(255, 221, 0, 0.7)',
+            data: [],
+            pointRadius: 6,
+            pointBackgroundColor: '#ffdd00',
+            pointHoverRadius: 8,
+            pointBorderColor: '#000000'
+
+          }]
+        },
+
+        weekData: {
+          
+          labels: ['Sunday', 'Monday', 'Thuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          datasets: [{
+
+            label: 'Daily Cost',
+            data: [],
+            backgroundColor: 'rgba(255, 221, 0, 0.7)',
+
+          },
+          {
+
+            label: 'kW spent',
+            data: [],
+            backgroundColor: 'rgba(244, 156, 41, 0.7)',
+
+          }],
+        },
 
         loaded: false,
 
-        datacollection: null
+        interval: null,
 
+        activeData: {
+
+          active: '',
+
+          type: 'elec'
+
+        }
       };
 
     },
 
     components: {
 
-      'chart': Line
+      'chart': Line,
+      'modal': Modal,
+      'bar': Bar
 
     },
 
     created() {
-      
+    
       let db = this.$store.state.db;
 
-      db.collection('consts').doc('Elect').get().then( doc => {
+      let weekAffairs = this.$store.state.elecDataCollection.weekAffairs
 
-        let data = doc.data();
+      this.retreiveData(db);
 
-        this.$store.dispatch('setConsts', {
+      this.retreiveConsts(db);
 
-          type: 'elec',
-          consts: {
+      this.retreiveAffairs(db, weekAffairs);
 
-            cost: data.cost,
-            number_devices: data.field_1,
-            mean_time_device: data.field_2,
-            number_other_sources: data.field_3,
-            outher_mean_time: data.field_4,
-            last_value: data.last_value
+      //this.start();
+          
+    },
 
-          }
-        })
+    beforeDestroy() {
 
-        this.cost = data.cost
+      let db = this.$store.state.db
 
-        this.number_devices = data.field_1
+      let writeBack = this.$store.state.elecDataCollection.writeBack
 
-        this.mean_time_device = data.field_2
+      let weekAffairs = this.$store.state.elecDataCollection.weekAffairs
 
-        this.number_other_sources = data.field_3
+      let consts = {
 
-        this.outher_mean_time = data.field_4
+          cost: Number(this.consts.cost),
+          field_1: Number(this.consts.number_devices)
 
-        this.loaded = true;
+      }
 
-      })
+      db.collection('consts').doc('Elect').set(consts)
 
-      /*setInterval( () => {
+      this.releaseWriteBack(writeBack, db);
 
-        this.submitValue();
-        this.updateChart();
+      this.releaseAffairs(weekAffairs, db);
 
-      }, 5000)*/
+      window.clearInterval(this.interval)
+
     },
 
     methods: {
+
+      start() {
+
+        this.interval = window.setInterval( () => { 
+          
+          this.updateChart() 
+          
+        }, 10000)
+
+      },
 
       submit: function() {
 
@@ -126,80 +253,188 @@
         let consts = {
 
           cost: Number(this.cost),
-          field_1: Number(this.number_devices),
-          field_2: Number(this.outher_mean_time),
-          field_3: Number(this.number_other_sources),
-          field_4: Number(this.outher_mean_time),
-          last_value: this.last_value || 0
+          field_1: Number(this.number_devices)
 
         }
 
         db.collection('consts').doc('Elect').set(consts) 
 
-        this.$store.dispatch('setConsts', {
-
-          type: 'elec',
-          consts: consts
-
-        })
       },
 
-      submitValue: function(){
-
-        let db = this.$store.state.db;
+      updateChart() {
 
         let date = new Date();
 
-        let start = Date.now();
+        let values = {
 
-        db.collection('Data').doc(`${start}`).set({
+          type: 'water',
 
-          type: 'elec',
+          day: date.getDay(),
+
           date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-          value: this.cost*(this.number_devices*this.mean_time_device + this.number_other_sources*this.outher_mean_time) + this.last_value
 
-        })
+          value: this.getValue(date.getDay())
 
-        this.last_value = this.cost*(this.number_devices*this.mean_time_device + this.number_other_sources*this.outher_mean_time) + this.last_value
+        }
+
+        let payload = { type: 'elec', data: { doc:`${Date.now()}` , values } }
+
+        let chartData = {data: this.dataCollection.datasets[0].data, labels: this.dataCollection.labels} 
+
+        chartData.labels.push(values.date)
+        chartData.data.push(values.value)
+        
+        this.$store.dispatch('updateWriteBack', payload)
+
+        this.consts.last_value = values.value
+
+        this.dataCollection = {
+
+          labels: chartData.labels,
+          datasets: [{
+
+            label: 'Electricity',
+            backgroundColor: 'rgba(255, 221, 0, 0.05)',
+            borderColor: 'rgba(255, 221, 0, 0.7)',
+            data: chartData.data,
+            pointRadius: 6,
+            pointBackgroundColor: '#ffdd00',
+            pointHoverRadius: 8,
+            pointBorderColor: '#000000'
+
+          }]
+        }
 
       },
 
-      updateChart: function() {
+      add(e) {
 
-        let db = this.$store.state.db;
+      this.activeData.active = e.target.parentElement.innerText
+
+      this.$store.dispatch('showModal', {modal: true});
+
+      },
+
+      getValue(day) {
+
+        let weekAffairs = this.$store.state.elecDataCollection.weekAffairs
+
+        let affairs = weekAffairs[Object.keys(weekAffairs)[day]].affairs
+
+        let durations = affairs.reduce( (prev, current) => {
+
+          return prev + Number(current.duration)*Number(current.times)
+
+        }, 0)
+
+        return durations/60*this.consts.number_devices*this.consts.cost
+      },
+
+      retreiveData(db) {
 
         db.collection('Data').where('type', '==', 'elec').get().then( querySnapshot => {
-
-          let labels = [];
-          let data = [];
 
           querySnapshot.forEach( doc => {
 
             let date = doc.data().date;
             let value = doc.data().value;
 
-            labels.push(date);
-            data.push(value);
+            this.dataCollection.labels.push(date);
+            this.dataCollection.datasets[0].data.push(value);
             
           });
 
-          this.$store.dispatch('setData', {
-
-          type: 'elec',
-          data: data
-
-          })
-
-          this.$store.dispatch('setLabels', {
-
-            type: 'elec',
-            data: labels
-
-          })
-          
         }).catch( error => console.log(error))
 
+      },
+
+      retreiveConsts(db) {
+
+        db.collection('consts').doc('Elect').get().then( doc => {
+
+          let data = doc.data();
+
+          this.consts = {
+
+              cost: data.cost,
+              number_devices: data.field_1,
+
+          }
+        })
+      },
+
+      retreiveAffairs(db, weekAffairs) {
+
+        db.collection('Affairs1').where('type', '==', 'elec').get().then( querySnapshot => {
+
+          querySnapshot.forEach( doc => {
+
+            let data = doc.data()
+
+            this.$store.dispatch('loadAffair', {type: 'elec', data: data})
+
+            this.loaded = true
+
+          })
+
+          Object.keys(weekAffairs).forEach( (day, index) => {
+
+            let value = this.getValue(index);
+
+            this.weekData.datasets[0].data.push(value.toFixed(2))
+            this.weekData.datasets[1].data.push( (value/this.consts.cost).toFixed(2) )
+
+          })
+
+        })
+      },
+
+      releaseWriteBack(writeBack, db) {
+
+        writeBack.forEach( (data) => {
+
+          db.collection('Data').doc(data.doc).set({
+
+            type: data.values.type,
+            date: data.values.date,
+            value: data.values.value,
+            day: data.values.day
+
+          }).catch( (error) => console.log(error) )
+
+        })
+
+        this.$store.dispatch('clearWriteBack', {type: 'elec'})
+      },
+
+      releaseAffairs(weekAffairs, db) {
+
+        Object.keys(weekAffairs).forEach( (day) => {
+
+          db.collection('Affairs1').doc(day).set(weekAffairs[day])
+
+        })
+
+        this.$store.dispatch('clearAffairs', {type: 'elec'})
+      },
+
+      remove(day, affair) {
+
+        console.log(day, affair)
+
+        this.$store.dispatch('removeAffair', {type: 'elec', day: day, affair: affair})
+
       }
+      
+    },
+
+    computed: {
+
+      weekAffairs() {
+
+        return this.$store.state.elecDataCollection.weekAffairs
+      }
+
     },
 
     name: 'elec'
@@ -221,11 +456,103 @@
     
   }
 
+  .calendar {
+
+    width: 90%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 250px);
+    grid-gap: 10px;
+    justify-items: center;
+
+  }
+
+  .day {
+
+    background-color: #191919;
+    width: 85%;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);
+
+  }
+
+  .affairs {
+
+    overflow: auto;
+    height: 150px;
+    margin-top: 5px;
+  }
+
+  .day i.add {
+
+    float: right;
+    cursor: pointer;
+    position: relative;
+    top: 0px;
+    left: 0px;
+
+  }
+
+  .day ul {
+
+    list-style: none;
+    margin-top: 5px;
+    padding: 0;
+    text-align: left;
+    
+  }
+
+  .day li {
+
+    margin-bottom: 5px;
+    color: white;
+    font-weight: 300;
+  }
+
+  .day span {
+
+    background-color: #282828;
+    box-shadow: 2px 2px 5px 1px rgba(255, 221, 0, 0.75);
+    display: block;
+    color: #ccc ;
+    font-weight: 300;
+    margin: 0;
+    padding: 5px;
+
+  }
+
+
   #spinner {
 
     position: static;
     font-size: 60px;
     margin: auto;
+
+  }
+
+  .calendar .day span.affair-info {
+
+    display: block;
+    width: 95%;
+    box-shadow: 0px 0px 0px 0px;
+
+
+  }
+
+  .calendar .day i.remove-btn {
+
+   
+    position: static;
+    float: right;
+    cursor: pointer;
+
+  }
+
+  .calendar .day i.remove-btn:hover {
+
+    color: #ffdd00;
 
   }
 
@@ -244,42 +571,31 @@
 
   }
 
-  .form-wrapper {
 
-    background-color: #191919;
-    margin: 20px 25px;
-    display: flex;
-    align-content: center;
-    width: 40%;
-    height: 40%;
+  .day input {
 
-  }
-
-  .form-wrapper input {
-
-    margin: 0px auto;
-    padding: 10px 50px;
-    width: 200px;
+    margin: auto;
+    padding: 10px 40px;
     color: white;
     font-size: 14px;
     display: block;
     background-color: #282828;
     box-shadow: 0px 0px 20px 2px rgba(0,0,0,0.75);
     border: none;
+    box-sizing: border-box;
 
   }
 
 
-  .form-wrapper form input:focus {
+  .day form input:focus {
 
     outline: none;
     
   }
 
-  .form-wrapper form {
+  .day form {
 
-    margin: 20px auto;
-    display: inline-block;
+    display: block;
 
   }
 
@@ -287,7 +603,7 @@
 
     position: relative;
     top: -28px;
-    left: 14px;
+    right: 98px;
     margin: 0;
     color: #a5a5a5;
     font-size: 20px;

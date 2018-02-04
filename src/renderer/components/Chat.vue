@@ -36,35 +36,7 @@
 
       post: function () {
 
-       /* let msg = this.$refs.msg.value;
-
-        //let res = Watson.response(msg);
-
-        let display = this.$refs.display.querySelector('ul');
-
-        console.log(display);
-
-        let msgToDisplay = document.createElement('span');
-        let icon = document.createElement('img');
-        let li = document.createElement('li');
-        let div = document.createElement('div');
-
-        div.setAttribute('class', 'msg');
-
-        icon.setAttribute('src', 'src/renderer/assets/logo.png');
-        icon.setAttribute('class', 'logo');
-
-        //msgToDisplay.appendChild(icon);
-
-        msgToDisplay.innerHTML = "Hello!"
-
-        div.appendChild(msgToDisplay);
-
-        li.appendChild(div);
-
-        display.appendChild(li)
-
-        //display.appendChild(res)*/
+       
 
       }
     }
@@ -78,8 +50,6 @@
     width: 23.3%;
     height: 91%;
     background-color: #4A4A4A;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
     margin: 0px;
     overflow-y: auto;
 
@@ -90,8 +60,8 @@
     width: 95%;
     height: 76.3%;
     background: #282828;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
     overflow-y: auto;
     margin-top: 15px;
     margin-left: 15px;
@@ -123,12 +93,18 @@
 
   }
 
+  #chat-message input[type="text"]:focus{
+
+    outline: none;
+
+  }
+
   #chat-message{
 
     background: #282828;;
     display: flex;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
     width: 95%;
     height: 10.0%;
     margin-left: 15px;
