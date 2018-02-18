@@ -1,106 +1,95 @@
 <template>
 <div>
-  <div class="calendar">
-    <div class="day">
-    <form>
-        <i class="fas fa-tint"></i>
-        <div >
-        <input v-model="consts.cost" type="text" name="cost" placeholder="€ per m^3">
-        <i class="fas fa-euro-sign"></i>
+    <div class="calendar">
+        <div class="day">
+            <slot name="form"></slot>
         </div>
-        <div >
-        <input v-model="consts.liters_per_min" type="text" name="liters" placeholder="Nº of liters per minute">
-        <i class="fas fa-shower"></i>
+        <div class="day">
+            <span>Monday <i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.monday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('monday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-        <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
-    </form>
-    </div>
-    <div class="day">
-        <span>Monday <i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.monday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('monday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
+        <div class="day">
+            <span>Thuesday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.thuesday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('thuesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-    </div>
-    <div class="day">
-        <span>Thuesday<i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.thuesday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('thuesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
+        <div class="day">
+            <span>Wednesday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.wednesday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('wednesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-    </div>
-    <div class="day">
-        <span>Wednesday<i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.wednesday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('wednesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
+        <div class="day">
+            <span>Thursday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.thursday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('thursday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-    </div>
-    <div class="day">
-        <span>Thursday<i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.thursday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('thursday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
+        <div class="day">
+            <span>Friday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.friday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('friday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-    </div>
-    <div class="day">
-        <span>Friday<i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.friday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('friday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
+        <div class="day">
+            <span>Saturday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.saturday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('saturday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-    </div>
-    <div class="day">
-        <span>Saturday<i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.saturday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('saturday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
+        <div class="day">
+            <span>Sunday<i @click="add($event)" class="add fas fa-plus"></i></span>
+            <div class="affairs">
+            <ul>
+                <li v-for="affair in weekAffairs.sunday.affairs"> 
+                    <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
+                        <i @click="remove('sunday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
+                    </span> 
+                </li>
+            </ul>    
+            </div>
         </div>
-    </div>
-    <div class="day">
-        <span>Sunday<i @click="add($event)" class="add fas fa-plus"></i></span>
-        <div class="affairs">
-        <ul>
-            <li v-for="affair in weekAffairs.sunday.affairs"> 
-            <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                <i @click="remove('sunday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-            </span> 
-            </li>
-        </ul>    
         </div>
-    </div>
-    </div>
-    <modal :activeData="activeData"></modal>
+        <modal :activeData="activeData"></modal>
     </div>
 </template>
 
@@ -118,17 +107,10 @@ export default {
 
                 active: '',
 
-                type: 'water'
+                type: this.active
 
             },
 
-            consts: {
-
-                cost: null,
-
-                liters_per_min: null,
-
-            },
         }
     },
 
@@ -137,25 +119,24 @@ export default {
         'modal': Modal
     },
 
-    props: ['weekAffairs'],
+    props: ['weekAffairs', 'active'],
 
     methods: {
 
-    add(e) {
+        add(e) {
 
-        this.activeData.active = e.target.parentElement.innerText
+            this.activeData.active = e.target.parentElement.innerText
 
-        this.$store.dispatch('showModal', {modal: true});
-      },
+            this.$store.dispatch('showModal', {modal: true});
 
-      remove(day, affair) {
+        },
 
-        console.log(day, affair)
+        remove(day, affair) {
 
-        this.$store.dispatch('removeAffair', {type: 'water', day: day, affair: affair})
+            this.$store.dispatch('removeAffair', {type: this.active, day: day, affair: affair})
 
-      },
-    }
+        },
+    }   
 }
 
 </script>
@@ -301,6 +282,28 @@ export default {
     display: block;
     font-size: 40px;
     color: #00e7ff;
+    
+  }
+
+  .fa-bolt {
+
+    position: static;
+    margin: 15px auto;
+    text-align: center;
+    display: block;
+    font-size: 40px;
+    color: #ffdd00;
+    
+   }
+
+   .fa-fire {
+
+    position: static;
+    margin: 15px auto;
+    text-align: center;
+    display: block;
+    font-size: 40px;
+    color: #ff0066;
     
   }
 

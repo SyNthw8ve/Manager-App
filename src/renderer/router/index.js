@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/Home').default
     },
     {
+      path: '/overview',
+      name: 'overview',
+      component: require('@/components/Overview').default
+    },
+    {
       path: '/water',
       name: 'water',
       component: require('@/components/Water').default

@@ -2,10 +2,6 @@
   <div id="app">
     <navbar></navbar>
     <mainContent></mainContent>
-    <!-- <div class="flex-container">
-      <mainContent></mainContent>
-      <chat></chat>
-    </div> -->
   </div>
 </template>
 
@@ -49,7 +45,7 @@
     height: 100%;
     width: 100%;
     font-family: Roboto;
-    background: #404040;
+    background: #282828;
     margin: 0px;
     overflow: hidden;
 

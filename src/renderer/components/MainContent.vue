@@ -6,6 +6,8 @@
 
 <script>
 
+  import { bus } from '../main'
+
   export default {
     components: {
 
@@ -18,6 +20,15 @@
       }
     },
 
+    created() {
+
+      bus.$on('slideOn', () => {
+
+        document.getElementById('left-display').classList.toggle('active')
+
+      })
+    },
+
     name: 'mainContent',
 
   }
@@ -25,13 +36,19 @@
 
 <style scoped>
 
-  #left-display{
+  #left-display {
 
     width: 100%;
-    height: 91%;
+    height: 100%;
     margin: 0;
     overflow-y: auto;
+    transition: .4s;
     
+  }
+
+  #left-display.active {
+
+    margin-left: 250px;
   }
 
 </style>

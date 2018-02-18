@@ -4,107 +4,20 @@
     <div class="chart-wrapper">
       <chart :chart-data="dataCollection" class="chart"></chart>
     </div>
-    <div class="calendar">
-      <div class="day">
-          <form>
-            <i class="fas fa-bolt" ></i>
-            <div>
-              <input v-model="consts.cost" type="text" name="cost" placeholder="€ per Kw/h">
-              <i class="fas fa-euro-sign"></i>
-            </div>
-            <div >
-              <input v-model="consts.number_devices" type="text" name="kW" placeholder="Nº of devices">
-              <i class="fas fa-microchip"></i>
-            </div>
-            <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
-          </form>
+    <calendar :weekAffairs="weekAffairs" :active="active">
+      <form slot="form">
+        <i class="fas fa-bolt" ></i>
+        <div>
+          <input v-model="consts.cost" type="text" name="cost" placeholder="€ per Kw/h">
+          <i class="fas fa-euro-sign"></i>
         </div>
-      <div class="day">
-            <span>Monday <i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.monday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('monday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
-          <div class="day">
-            <span>Thuesday<i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.thuesday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('thuesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
-          <div class="day">
-            <span>Wednesday<i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.wednesday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('wednesday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
-          <div class="day">
-            <span>Thursday<i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.thursday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('thursday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
-          <div class="day">
-            <span>Friday<i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.friday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('friday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
-          <div class="day">
-            <span>Saturday<i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.saturday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('saturday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
-          <div class="day">
-            <span>Sunday<i @click="add($event)" class="add fas fa-plus"></i></span>
-            <div class="affairs">
-              <ul>
-                <li v-for="affair in weekAffairs.sunday.affairs"> 
-                  <span class="affair-info">{{affair.action}} {{affair.duration}} {{affair.times}} 
-                    <i @click="remove('sunday', {action: affair.action, duration: affair.duration, times: affair.times})" class="fas fa-minus-square remove-btn"></i>
-                  </span> 
-                </li>
-              </ul>    
-            </div>
-          </div>
+        <div >
+          <input v-model="consts.number_devices" type="text" name="kW" placeholder="Nº of devices">
+          <i class="fas fa-microchip"></i>
         </div>
-        <modal :activeData="activeData"></modal>
+        <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
+      </form>
+    </calendar>
         <div class="chart-wrapper">
           <bar :chart-data="weekData" class="chart"></bar>
         </div>
@@ -117,8 +30,10 @@
 
 <script>
   import Line from './Charts/Line.js'
-  import Modal from './Modals/Modal.vue'
   import Bar from './Charts/Bar'
+
+  import Modal from './Modals/Modal.vue'
+  import Calendar from './Calendar.vue'
 
   export default {
 
@@ -133,6 +48,8 @@
           number_devices: null,
 
         },
+
+        active: 'elec',
 
         dataCollection: {
 
@@ -174,13 +91,6 @@
 
         interval: null,
 
-        activeData: {
-
-          active: '',
-
-          type: 'elec'
-
-        }
       };
 
     },
@@ -189,7 +99,8 @@
 
       'chart': Line,
       'modal': Modal,
-      'bar': Bar
+      'bar': Bar,
+      'calendar': Calendar
 
     },
 
@@ -373,8 +284,7 @@
 
             this.$store.dispatch('loadAffair', {type: 'elec', data: data})
 
-            this.loaded = true
-
+             this.loaded = true
           })
 
           Object.keys(weekAffairs).forEach( (day, index) => {
@@ -456,103 +366,13 @@
     
   }
 
-  .calendar {
-
-    width: 90%;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 250px);
-    grid-gap: 10px;
-    justify-items: center;
-
-  }
-
-  .day {
-
-    background-color: #191919;
-    width: 85%;
-    padding: 10px;
-    text-align: center;
-    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);
-
-  }
-
-  .affairs {
-
-    overflow: auto;
-    height: 150px;
-    margin-top: 5px;
-  }
-
-  .day i.add {
-
-    float: right;
-    cursor: pointer;
-    position: relative;
-    top: 0px;
-    left: 0px;
-
-  }
-
-  .day ul {
-
-    list-style: none;
-    margin-top: 5px;
-    padding: 0;
-    text-align: left;
-    
-  }
-
-  .day li {
-
-    margin-bottom: 5px;
-    color: white;
-    font-weight: 300;
-  }
-
-  .day span {
-
-    background-color: #282828;
-    box-shadow: 2px 2px 5px 1px rgba(255, 221, 0, 0.75);
-    display: block;
-    color: #ccc ;
-    font-weight: 300;
-    margin: 0;
-    padding: 5px;
-
-  }
-
 
   #spinner {
 
     position: static;
     font-size: 60px;
     margin: auto;
-
-  }
-
-  .calendar .day span.affair-info {
-
-    display: block;
-    width: 95%;
-    box-shadow: 0px 0px 0px 0px;
-
-
-  }
-
-  .calendar .day i.remove-btn {
-
-   
-    position: static;
-    float: right;
-    cursor: pointer;
-
-  }
-
-  .calendar .day i.remove-btn:hover {
-
-    color: #ffdd00;
+    color: #a5a5a5;
 
   }
 
@@ -571,69 +391,5 @@
 
   }
 
-
-  .day input {
-
-    margin: auto;
-    padding: 10px 40px;
-    color: white;
-    font-size: 14px;
-    display: block;
-    background-color: #282828;
-    box-shadow: 0px 0px 20px 2px rgba(0,0,0,0.75);
-    border: none;
-    box-sizing: border-box;
-
-  }
-
-
-  .day form input:focus {
-
-    outline: none;
-    
-  }
-
-  .day form {
-
-    display: block;
-
-  }
-
-  .fas, .far {
-
-    position: relative;
-    top: -28px;
-    right: 98px;
-    margin: 0;
-    color: #a5a5a5;
-    font-size: 20px;
-    padding-right: 8px;
-
-  }
-
-  #submit {
-
-    color: #a5a5a5;
-    cursor: pointer;
-    box-shadow: 9px 11px 14px 0px rgba(0,0,0,0.75);
-
-  }
-
-  #submit:hover {
-
-    background-color: #191919;
-
-  }
-
-  .fa-bolt {
-
-    position: static;
-    margin: 15px auto;
-    text-align: center;
-    display: block;
-    font-size: 40px;
-    color: #ffdd00;
-    
-   }  
 
 </style>

@@ -1,56 +1,52 @@
 <template>
   <header>
-  <div id="wrapper">
-    <router-link to="/"><img id="logo" src="../assets/logo.png" /></router-link>
-        <nav>
-            <ul>
-              <li>
-                <router-link to="/">
-                  <i class="icon fas fa-home"></i>
-                  <p>
-                    Home
-                  </p>
-                </router-link>
-              </li>
-              <li class="dropdown">
-                <a class="dropbtn">
-                  <i class="icon fas fa-chart-area"></i>
-                  <p>
-                    Manager
-                  </p>
-                </a>
-                  <div class="dropdown-content">
-
-                    <router-link to="/water">
-                      <i class="fas fa-tint" ></i>
-                      <p>Water</p>
-                      <i class="next fas fa-chevron-right" ></i>
-                    </router-link>
-
-                    <router-link to="/elec">
-                      <i class="fas fa-bolt" ></i>
-                      <p>Electricity</p>
-                      <i class="next fas fa-chevron-right" ></i>
-                    </router-link>
-
-                    <router-link to="/gas">
-                      <i class="fas fa-fire"></i>
-                      <p>Gas</p>
-                      <i class="next fas fa-chevron-right" ></i>
-                    </router-link>
-                  </div>
-              </li>
-              <li >
-                <router-link to="/">
-                  <i ref="cog" class="icon fas fa-cog" ></i>
-                  <p>
-                    Config
-                  </p>
-                </router-link>
-              </li>
-            </ul>
-        </nav>
-  </div>
+    <div id="side-menu" class="side-nav">
+      <span class="open-slider" @click="openSlideMenu()">
+        <i class="fas fa-bars"></i>
+      </span>
+      <span class="marks">Landing</span>
+      <ul>
+        <li>
+          <router-link to="/" @click="active()">
+            <p>Home</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="#" @click="active()">
+            <p>About Us</p>
+          </router-link>
+        </li>
+      </ul>
+      <span class="marks">Management</span>
+      <ul>
+        <li>
+          <router-link to="/overview" @click="active()">
+            <p>Overview</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/water" @click="active()">
+            <p>Water</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/elec" @click="active()">
+            <p>Electricity</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/gas" @click="active()">
+            <p>Gas</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/gas" @click="active()">
+            <p>Add State</p>
+            <i class="fas fa-plus-circle"></i>
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </header>
 </template>
 
@@ -64,19 +60,13 @@
 
     methods: {
 
-      spin: function (event) {
+      openSlideMenu()
+      {
+        document.getElementById('side-menu').classList.toggle('active')
+        document.querySelector('.fa-bars').classList.toggle('fa-times-circle')
 
-        let cog = this.$refs.cog;
-
-        if(event){
-
-          cog.classList.add('fa-spin');
-
-        } else {
-
-          cog.classList.remove('fa-spin');
-        }
-      }
+        bus.$emit('slideOn');
+      },
 
     }
   }
@@ -84,188 +74,82 @@
 
 <style scoped>
 
-/* Navbar */
+* {
 
-  .wrapper{
+  margin: 0;
+  padding: 0;
+}
+
+header{
 
   width: 100%;
   margin: 0;
+}
 
-  }
-
-  header{
-
-  background: #191919;
-
-  }
-
-  header nav{
-
-  float: left;
-
-  }
-
-  header p{
+.fas, p {
 
   display: inline-block;
-  font-size: 20px;
-  margin: 0px;
+  margin: 0;
+}
 
-  }
+.fa-bars {
 
-  header:after {
+  font-size: 30px;
+  color: #fff;
+}
 
-  content: "";
+.fa-plus-circle {
+
+  font-size: 22px;
+  color: #ddd;
+  float: right;
+}
+
+.marks {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  color: #727171;
+  padding: 10px;
   display: block;
-  clear: both;
+}
 
-  }
+#side-menu {
 
-  header nav ul{
+  width: 250px;
+  height: 100%;
+  position: absolute;
+  background-color: #191919;
+  left: -250px;
+  transition: .4s;
+}
 
-  list-style: none;
-  display: flex;
-  margin: 0px 0px;
+#side-menu.active {
 
-  }
-
-  header nav li{
-
-  padding-top: 11px;
-  padding-left: 23px;
-  padding-right: 23px;
-  cursor: pointer;
-  border-top: 4px solid transparent;
-  width: 120px;
-
-  }
-
-  header nav li:hover{
-
-  border-top: 4px solid #00D8F0;
-
-  }
-
-  header nav a{
+  left: 0;
+}
+  
+#side-menu a {
 
   text-decoration: none;
+  color: #ddd;
+  display: block;
+  padding: 15px 24px;
+  border-left: 4px solid transparent;
+  font-size: 16px;
   font-weight: 300;
-  color: #fff;
+}
 
-  }
+#side-menu a:hover {
 
-  #logo{
+  border-left: 4px solid #00D8F0;
+  background-color: #000;
+}
 
-  width: 55px;
-  float: left;
-  margin-left: 15px;
-  margin-bottom: 5px;
-  margin-top: 13px;
+#side-menu .open-slider {
 
-  }
+  position: absolute;
+  top: 30px;
+  left: 280px;
+}
 
-  .icon{
-
-  font-size: 25px;
-  margin-right: 10px;
-  margin-top: 5px;
-  display: inline-block;
-
-  }
-
-  /* dropdown-menu */
-
-  .dropbtn {
-
-    display: inline-block;
-    font-size: 20px;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 18px;
-    cursor: pointer;
-
-  }
-
-
-  li.dropdown {
-
-    display: inline-block;
-    cursor: pointer;
-
-  }
-
-  .dropdown-content {
-
-    display: none;
-    position: absolute;
-    border-bottom-right-radius: 20px;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    width: 230px;
-    z-index: 1;
-
-  }
-
-  .dropdown-content a {
-
-    color: white;
-    border: 1px solid #707070;
-    border-left: 4px solid #707070;
-    background: #303030;
-    padding: 6px 0px;
-    padding-left: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-
-  }
-
-  .dropdown-content a:last-child {
-
-    border-bottom-right-radius: 20px;
-      
-
-  }
-
-  .dropdown-content a:hover {
-
-    border-left: 4px solid #00D8F0;
-
-  }
-
-  .dropdown-content a:hover .next {
-
-    font-size: 25px;
-
-  }
-
-  .dropdown:hover .dropdown-content {
-
-      display: block;
-
-  }
-
-  .dropdown-content .fas{
-
-    font-size: 25px;
-    margin-top: 2px;
-    margin-right: 10px;
-
-  }
-
-  dropdown-content p{
-
-    font-size: 18px;
-    display: inline-block;
-
-  }
-
-  .next{
-
-    margin-top: 2px;
-    margin-right: 5px;
-    font-size: 0px;
-    float: right;
-
-  }
 </style>

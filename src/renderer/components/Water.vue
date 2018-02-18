@@ -6,13 +6,26 @@
             <chart :chart-data="dataCollection" class="chart"></chart>
           </div>
           <div class="chart-wrapper">
-            <bar :chart-data="weekData" class="chart"></bar>
+            <bar :chart-data="barData" class="chart"></bar>
           </div>
           <div class="chart-wrapper">
             <doughnut :chart-data="actionData" class="chart"></doughnut>
           </div>
       </div>
-      <calendar :weekAffairs="weekAffairs"></calendar>
+      <calendar :weekAffairs="weekAffairs" :active="active">
+        <form slot="form">
+          <i class="fas fa-tint"></i>
+          <div >
+          <input v-model="consts.cost" type="text" name="cost" placeholder="€ per m^3">
+          <i class="fas fa-euro-sign"></i>
+          </div>
+          <div >
+          <input v-model="consts.liters_per_min" type="text" name="liters" placeholder="Nº of m^3">
+          <i class="fas fa-shower"></i>
+          </div>
+          <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
+        </form>
+      </calendar>
     </div>
     <div class="loading" v-if="!loaded">
       <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
@@ -48,83 +61,27 @@
 
       return {
 
-        consts: {
+        active: 'water',
 
-          cost: null,
+        loaded: false,
 
-          liters_per_min: null,
-
-        },
-
-        dataCollection: {
-
-          labels: [],
-          datasets: [{
-
-            label: 'Water',
-            backgroundColor: 'rgba(0, 231, 255, 0.05)',
-            borderColor: 'rgba(0, 231, 255, 0.7)',
-            data: [],
-            pointRadius: 6,
-            pointBackgroundColor: '#00e7ff',
-            pointHoverRadius: 8,
-            pointBorderColor: '#000000'
-
-          }]
-        },
-
-        weekData: {
-          
-          labels: ['Sunday', 'Monday', 'Thuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-          datasets: [{
-
-            label: 'Daily Cost',
-            data: [],
-            backgroundColor: 'rgba(0, 231, 255, 0.7)',
-
-          },
-          {
-
-            label: 'Liters Spent (m^3)',
-            data: [],
-            backgroundColor: 'rgba(0, 196, 176, 0.7)',
-
-          }],
-        },
-
-        actionData: {
-
-          labels: [],
-
-          datasets: [{
-
-              label: 'Action Costs',
-              backgroundColor: [],
-              data: []
-
-            }]
-
-        },
-
-      loaded: false,
-
-      interval: null,
+        interval: null,
 
     }
 
   },
 
     created() {
-    
-      let db = this.$store.state.db
+  
+      let payload = {db: this.$store.state.db, type: 'water'}
 
-      let weekAffairs = this.$store.state.water.weekAffairs
+      this.$store.dispatch('loadConsts', {db: this.$store.state.db, type: 'water', doc: 'Water'})
 
-      this.retreiveData(db);
+      this.$store.dispatch('loadData', payload)
 
-      this.retreiveConsts(db);
+      this.$store.dispatch('loadAffairs', payload)
 
-      this.retreiveAffairs(db, weekAffairs);
+      this.loaded = true;
 
       //this.start();
 
@@ -136,7 +93,7 @@
 
       let writeBack = this.$store.state.water.writeBack
 
-      let weekAffairs = this.$store.state.water.weekAffairs
+      let weekAffairs = this.$store.state['water'].weekAffairs
 
       let consts = {
 
@@ -147,9 +104,9 @@
 
       db.collection('consts').doc('Water').set(consts)
 
-      this.releaseWriteBack(writeBack, db);
+      //this.releaseWriteBack(writeBack, db);
 
-      this.releaseAffairs(weekAffairs, db);
+      this.$store.dispatch('releaseAffairs', {db: db, type: 'water'})
 
       window.clearInterval(this.interval)
 
@@ -226,81 +183,6 @@
 
       },
 
-      getValue(day) {
-
-        let weekAffairs = this.$store.state.water.weekAffairs
-
-        let affairs = weekAffairs[Object.keys(weekAffairs)[day]].affairs
-
-        let durations = affairs.reduce( (prev, current) => {
-
-          return prev + Number(current.duration)*Number(current.times)
-
-        }, 0)
-
-        return durations*this.consts.liters_per_min*this.consts.cost/1000
-      },
-
-      retreiveData(db) {
-
-        db.collection('Data').where('type', '==', 'water').get().then( querySnapshot => {
-
-          querySnapshot.forEach( doc => {
-
-            let date = doc.data().date;
-            let value = doc.data().value;
-
-            this.dataCollection.labels.push(date);
-            this.dataCollection.datasets[0].data.push(value);
-            
-          });
-
-        }).catch( error => console.log(error))
-
-      },
-
-      retreiveConsts(db) {
-
-        db.collection('consts').doc('Water').get().then( doc => {
-
-          let data = doc.data();
-
-          this.consts = {
-
-              cost: data.cost,
-              liters_per_min: data.field_1,
-
-          }
-        })
-      },
-
-      retreiveAffairs(db, weekAffairs) {
-
-        db.collection('Affairs').where('type', '==', 'water').get().then( querySnapshot => {
-
-          querySnapshot.forEach( doc => {
-
-            let data = doc.data()
-
-            this.$store.dispatch('loadAffair', {type: 'water', data: data})
-
-            this.loaded = true
-          })
-
-          Object.keys(weekAffairs).forEach( (day, index) => {
-
-            let value = this.getValue(index);
-
-            this.weekData.datasets[0].data.push(value.toFixed(2))
-            this.weekData.datasets[1].data.push( (value/this.consts.cost).toFixed(2) )
-
-          })
-
-          this.actionsCost(this.$store.state.water.weekAffairs);
-
-        })
-      },
-
       releaseWriteBack(writeBack, db) {
 
         writeBack.forEach( (data) => {
@@ -319,62 +201,33 @@
         this.$store.dispatch('clearWriteBack', {type: 'water'})
       },
 
-      releaseAffairs(weekAffairs, db) {
-
-        Object.keys(weekAffairs).forEach( (day) => {
-
-          db.collection('Affairs').doc(day).set(weekAffairs[day])
-
-        })
-
-        this.$store.dispatch('clearAffairs', {type: 'water'})
-      },
-
-      actionsCost(weekAffairs) {
-
-        let result = {}
-
-        Object.keys(weekAffairs).forEach( (day) => {
-
-          weekAffairs[day].affairs.forEach( affair => {
-
-            let value = Number(affair.duration)*Number(affair.times)*this.consts.liters_per_min*this.consts.cost/1000
-
-              if(result[affair.action] === undefined) {
-
-                result[affair.action] = value
-
-              } else {
-
-                let v = Number(result[affair.action]) + value
-
-                result[affair.action] = v
-
-              }
-
-          })
-
-        })
-
-        Object.keys(result).forEach( (action, index) => {
-
-          this.actionData.labels.push(action)
-
-          this.actionData.datasets[0].data.push(result[action])
-
-          this.actionData.datasets[0].backgroundColor.push(`rgb(0, 231,  ${255 - 30*(index)})`)
-        })
-
-      },
-
     },
 
     computed: {
 
       weekAffairs() {
 
-        return this.$store.state.water.weekAffairs
+        return this.$store.state['water'].weekAffairs
+      },
 
+      consts() {
+
+        return this.$store.state['water'].consts
+      },
+
+      dataCollection() {
+
+        return this.$store.state['water'].dataCollection
+      },
+
+      barData() {
+
+        return this.$store.state['water'].weekData
+      },
+
+      actionData() {
+
+        return this.$store.state['water'].actionData
       }
 
     },
