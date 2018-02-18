@@ -6,9 +6,9 @@ export default {
         
         consts: {
 
-            cost: null,
+          cost: null,
 
-            liters_per_min: null,
+          liters_per_minute: null,
 
         },
 

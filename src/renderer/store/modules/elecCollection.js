@@ -7,9 +7,9 @@ export default {
         consts: {
 
             cost: null,
-
-            liters_per_min: null,
-
+  
+            number_devices: null,
+  
         },
 
         dataCollection: {
@@ -17,12 +17,12 @@ export default {
             labels: [],
             datasets: [{
   
-              label: 'Water',
-              backgroundColor: 'rgba(0, 231, 255, 0.05)',
-              borderColor: 'rgba(0, 231, 255, 0.7)',
+              label: 'Electricity',
+              backgroundColor: 'rgba(255, 221, 0, 0.05)',
+              borderColor: 'rgba(255, 221, 0, 0.7)',
               data: [],
               pointRadius: 6,
-              pointBackgroundColor: '#00e7ff',
+              pointBackgroundColor: '#ffdd00',
               pointHoverRadius: 8,
               pointBorderColor: '#000000'
   
@@ -33,13 +33,13 @@ export default {
           
         weekAffairs: {
 
-            'sunday': { day: 'sunday', affairs: [], type: 'water'},
-            'monday': { day: 'monday', affairs: [], type: 'water'},
-            'thuesday': { day: 'thuesday', affairs: [], type: 'water'},
-            'wednesday': { day: 'wednesday', affairs: [], type: 'water'},
-            'thursday': { day: 'thursday', affairs: [], type: 'water'},
-            'friday': { day: 'friday', affairs: [], type: 'water'},
-            'saturday': { day: 'saturday', affairs: [], type: 'water'}
+            'sunday': { day: 'sunday', affairs: [], type: 'elec'},
+            'monday': { day: 'monday', affairs: [], type: 'elec'},
+            'thuesday': { day: 'thuesday', affairs: [], type: 'elec'},
+            'wednesday': { day: 'wednesday', affairs: [], type: 'elec'},
+            'thursday': { day: 'thursday', affairs: [], type: 'elec'},
+            'friday': { day: 'friday', affairs: [], type: 'elec'},
+            'saturday': { day: 'saturday', affairs: [], type: 'elec'}
 
         },
 
@@ -50,14 +50,14 @@ export default {
   
               label: 'Daily Cost',
               data: [],
-              backgroundColor: 'rgba(0, 231, 255, 0.7)',
+              backgroundColor: 'rgba(255, 221, 0, 0.7)',
   
             },
             {
   
-              label: 'Liters Spent (m^3)',
+              label: 'kW spent',
               data: [],
-              backgroundColor: 'rgba(0, 196, 176, 0.7)',
+              backgroundColor: 'rgba(244, 156, 41, 0.7)',
   
             }],
         },

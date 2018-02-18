@@ -197,14 +197,6 @@ export default new Vuex.Store({
 
       state[payload.type].weekAffairs[payload.day].affairs.push(payload.data)
 
-      if (payload.type === 'elec') {
-
-        state.elecDataCollection.weekAffairs[payload.day].affairs.push(payload.data)
-
-      } else if (payload.type === 'gas') {
-
-        state.gasDataCollection.weekAffairs[payload.day].affairs.push(payload.data)
-      }
     },
 
     removeAffair(state, payload) {
@@ -301,7 +293,7 @@ export default new Vuex.Store({
 
       let db = payload.db
 
-      db.collection('Affairs').where('type', '==', 'water').get().then( querySnapshot => {
+      db.collection('Affairs').where('type', '==', payload.type).get().then( querySnapshot => {
 
         querySnapshot.forEach( doc => {
 

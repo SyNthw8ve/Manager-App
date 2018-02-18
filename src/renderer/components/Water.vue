@@ -15,13 +15,13 @@
       <calendar :weekAffairs="weekAffairs" :active="active">
         <form slot="form">
           <i class="fas fa-tint"></i>
-          <div >
-          <input v-model="consts.cost" type="text" name="cost" placeholder="€ per m^3">
-          <i class="fas fa-euro-sign"></i>
+          <div>
+            <input v-model="consts.cost" type="text" name="cost" placeholder="€ per m^3">
+            <i class="fas fa-euro-sign"></i>
           </div>
-          <div >
-          <input v-model="consts.liters_per_min" type="text" name="liters" placeholder="Nº of m^3">
-          <i class="fas fa-shower"></i>
+          <div>
+            <input v-model="consts.liters_per_min" type="text" name="liters" placeholder="Nº of m^3">
+            <i class="fas fa-shower"></i>
           </div>
           <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
         </form>
@@ -272,8 +272,8 @@
     margin: 20px auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(1, auto);
-    grid-gap: 20px 0px;
+    grid-template-rows: repeat(2, auto);
+    grid-gap: 10px 0px;
     justify-items: center;
 
   }
@@ -286,11 +286,4 @@
     margin: 0 auto;
 
   }
-
-  #line {
-
-    grid-column: 1/3;
-    
-  }
-
 </style>

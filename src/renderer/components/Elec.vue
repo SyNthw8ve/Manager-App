@@ -1,9 +1,17 @@
 <template>
 <div>
-  <div v-if="loaded">
-    <div class="chart-wrapper">
-      <chart :chart-data="dataCollection" class="chart"></chart>
-    </div>
+    <div v-if="loaded">
+      <div class="chart-grid">
+          <div id="line" class="chart-wrapper">
+            <chart :chart-data="dataCollection" class="chart"></chart>
+          </div>
+          <div class="chart-wrapper">
+            <bar :chart-data="barData" class="chart"></bar>
+          </div>
+          <div class="chart-wrapper">
+            <doughnut :chart-data="actionData" class="chart"></doughnut>
+          </div>
+      </div>
     <calendar :weekAffairs="weekAffairs" :active="active">
       <form slot="form">
         <i class="fas fa-bolt" ></i>
@@ -18,9 +26,6 @@
         <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
       </form>
     </calendar>
-        <div class="chart-wrapper">
-          <bar :chart-data="weekData" class="chart"></bar>
-        </div>
   </div>
   <div class="loading" v-if="!loaded">
     <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
@@ -31,6 +36,7 @@
 <script>
   import Line from './Charts/Line.js'
   import Bar from './Charts/Bar'
+  import Doughnut from './Charts/Circle.js'
 
   import Modal from './Modals/Modal.vue'
   import Calendar from './Calendar.vue'
@@ -41,51 +47,7 @@
 
       return {
 
-        consts: {
-
-          cost: null,
-
-          number_devices: null,
-
-        },
-
         active: 'elec',
-
-        dataCollection: {
-
-          labels: [],
-          datasets: [{
-
-            label: 'Electricity',
-            backgroundColor: 'rgba(255, 221, 0, 0.05)',
-            borderColor: 'rgba(255, 221, 0, 0.7)',
-            data: [],
-            pointRadius: 6,
-            pointBackgroundColor: '#ffdd00',
-            pointHoverRadius: 8,
-            pointBorderColor: '#000000'
-
-          }]
-        },
-
-        weekData: {
-          
-          labels: ['Sunday', 'Monday', 'Thuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-          datasets: [{
-
-            label: 'Daily Cost',
-            data: [],
-            backgroundColor: 'rgba(255, 221, 0, 0.7)',
-
-          },
-          {
-
-            label: 'kW spent',
-            data: [],
-            backgroundColor: 'rgba(244, 156, 41, 0.7)',
-
-          }],
-        },
 
         loaded: false,
 
@@ -99,6 +61,7 @@
 
       'chart': Line,
       'modal': Modal,
+      'doughnut': Doughnut,
       'bar': Bar,
       'calendar': Calendar
 
@@ -106,15 +69,15 @@
 
     created() {
     
-      let db = this.$store.state.db;
+      let payload = {db: this.$store.state.db, type: 'elec'}
 
-      let weekAffairs = this.$store.state.elecDataCollection.weekAffairs
+      this.$store.dispatch('loadConsts', {db: this.$store.state.db, type: 'elec', doc: 'Elect'})
 
-      this.retreiveData(db);
+      this.$store.dispatch('loadData', payload)
 
-      this.retreiveConsts(db);
+      this.$store.dispatch('loadAffairs', payload)
 
-      this.retreiveAffairs(db, weekAffairs);
+      this.loaded = true;
 
       //this.start();
           
@@ -124,9 +87,9 @@
 
       let db = this.$store.state.db
 
-      let writeBack = this.$store.state.elecDataCollection.writeBack
+      let writeBack = this.$store.state.water.writeBack
 
-      let weekAffairs = this.$store.state.elecDataCollection.weekAffairs
+      let weekAffairs = this.$store.state['elec'].weekAffairs
 
       let consts = {
 
@@ -137,9 +100,9 @@
 
       db.collection('consts').doc('Elect').set(consts)
 
-      this.releaseWriteBack(writeBack, db);
+      //this.releaseWriteBack(writeBack, db);
 
-      this.releaseAffairs(weekAffairs, db);
+      this.$store.dispatch('releaseAffairs', {db: db, type: 'elec'});
 
       window.clearInterval(this.interval)
 
@@ -218,87 +181,6 @@
 
       },
 
-      add(e) {
-
-      this.activeData.active = e.target.parentElement.innerText
-
-      this.$store.dispatch('showModal', {modal: true});
-
-      },
-
-      getValue(day) {
-
-        let weekAffairs = this.$store.state.elecDataCollection.weekAffairs
-
-        let affairs = weekAffairs[Object.keys(weekAffairs)[day]].affairs
-
-        let durations = affairs.reduce( (prev, current) => {
-
-          return prev + Number(current.duration)*Number(current.times)
-
-        }, 0)
-
-        return durations/60*this.consts.number_devices*this.consts.cost
-      },
-
-      retreiveData(db) {
-
-        db.collection('Data').where('type', '==', 'elec').get().then( querySnapshot => {
-
-          querySnapshot.forEach( doc => {
-
-            let date = doc.data().date;
-            let value = doc.data().value;
-
-            this.dataCollection.labels.push(date);
-            this.dataCollection.datasets[0].data.push(value);
-            
-          });
-
-        }).catch( error => console.log(error))
-
-      },
-
-      retreiveConsts(db) {
-
-        db.collection('consts').doc('Elect').get().then( doc => {
-
-          let data = doc.data();
-
-          this.consts = {
-
-              cost: data.cost,
-              number_devices: data.field_1,
-
-          }
-        })
-      },
-
-      retreiveAffairs(db, weekAffairs) {
-
-        db.collection('Affairs1').where('type', '==', 'elec').get().then( querySnapshot => {
-
-          querySnapshot.forEach( doc => {
-
-            let data = doc.data()
-
-            this.$store.dispatch('loadAffair', {type: 'elec', data: data})
-
-             this.loaded = true
-          })
-
-          Object.keys(weekAffairs).forEach( (day, index) => {
-
-            let value = this.getValue(index);
-
-            this.weekData.datasets[0].data.push(value.toFixed(2))
-            this.weekData.datasets[1].data.push( (value/this.consts.cost).toFixed(2) )
-
-          })
-
-        })
-      },
-
       releaseWriteBack(writeBack, db) {
 
         writeBack.forEach( (data) => {
@@ -316,34 +198,36 @@
 
         this.$store.dispatch('clearWriteBack', {type: 'elec'})
       },
-
-      releaseAffairs(weekAffairs, db) {
-
-        Object.keys(weekAffairs).forEach( (day) => {
-
-          db.collection('Affairs1').doc(day).set(weekAffairs[day])
-
-        })
-
-        this.$store.dispatch('clearAffairs', {type: 'elec'})
-      },
-
-      remove(day, affair) {
-
-        console.log(day, affair)
-
-        this.$store.dispatch('removeAffair', {type: 'elec', day: day, affair: affair})
-
-      }
       
     },
 
     computed: {
 
-      weekAffairs() {
+     weekAffairs() {
 
-        return this.$store.state.elecDataCollection.weekAffairs
+        return this.$store.state['elec'].weekAffairs
+      },
+
+      consts() {
+
+        return this.$store.state['elec'].consts
+      },
+
+      dataCollection() {
+
+        return this.$store.state['elec'].dataCollection
+      },
+
+      barData() {
+
+        return this.$store.state['elec'].weekData
+      },
+
+      actionData() {
+
+        return this.$store.state['elec'].actionData
       }
+
 
     },
 
@@ -369,7 +253,7 @@
 
   #spinner {
 
-    position: static;
+    position: inherit;
     font-size: 60px;
     margin: auto;
     color: #a5a5a5;
@@ -382,14 +266,24 @@
 
   }
 
+  .chart-grid {
+
+    width: 100%;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    grid-gap: 10px 0px;
+    justify-items: center;
+
+  }
+
   .chart {
 
     width: 95%;
     background: #191919;
     box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
-    margin: 20px auto;
+    margin: 0 auto;
 
   }
-
-
 </style>
