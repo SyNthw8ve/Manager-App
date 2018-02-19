@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <navbar></navbar>
+    <chat></chat>
     <mainContent></mainContent>
   </div>
 </template>
