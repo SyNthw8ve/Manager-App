@@ -8,9 +8,11 @@ export default {
 
             cost: null,
   
-            number_devices: null,
+            var: null,
   
         },
+
+        const: 0,
 
         dataCollection: {
 

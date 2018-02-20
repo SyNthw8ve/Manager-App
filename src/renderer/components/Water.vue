@@ -6,11 +6,12 @@
             <chart :chart-data="dataCollection" class="chart"></chart>
           </div>
           <div class="chart-wrapper">
-            <bar :chart-data="barData" class="chart"></bar>
-          </div>
-          <div class="chart-wrapper">
             <doughnut :chart-data="actionData" class="chart"></doughnut>
           </div>
+          <div class="chart"></div>
+          <div id="bar" class="chart-wrapper">
+            <bar :chart-data="barData" class="chart"></bar>
+          </div> 
       </div>
       <calendar :weekAffairs="weekAffairs" :active="active">
         <form slot="form">
@@ -20,7 +21,7 @@
             <i class="fas fa-euro-sign"></i>
           </div>
           <div>
-            <input v-model="consts.liters_per_min" type="text" name="liters" placeholder="Nº of m^3">
+            <input v-model="consts.var" type="text" name="liters" placeholder="Nº of m^3">
             <i class="fas fa-shower"></i>
           </div>
           <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
@@ -72,14 +73,12 @@
   },
 
     created() {
-  
-      let payload = {db: this.$store.state.db, type: 'water'}
 
       this.$store.dispatch('loadConsts', {db: this.$store.state.db, type: 'water', doc: 'Water'})
 
-      this.$store.dispatch('loadData', payload)
+      this.$store.dispatch('loadData', {db: this.$store.state.db, type: 'water'})
 
-      this.$store.dispatch('loadAffairs', payload)
+      this.$store.dispatch('loadAffairs', {db: this.$store.state.db, type: 'water', doc: 'Affairs'})
 
       this.loaded = true;
 
@@ -98,7 +97,7 @@
       let consts = {
 
           cost: Number(this.consts.cost),
-          field_1: Number(this.consts.liters_per_min),
+          field_1: Number(this.consts.var),
 
       }
 
@@ -106,7 +105,7 @@
 
       //this.releaseWriteBack(writeBack, db);
 
-      this.$store.dispatch('releaseAffairs', {db: db, type: 'water'})
+      this.$store.dispatch('releaseAffairs', {db: db, type: 'water', doc: 'Affairs'})
 
       window.clearInterval(this.interval)
 
@@ -131,7 +130,7 @@
         let consts = {
 
           cost: Number(this.consts.cost),
-          field_1: Number(this.consts.liters_per_min)
+          field_1: Number(this.consts.var)
 
         }
 
@@ -233,7 +232,7 @@
     },
 
     name: 'water'
-  }
+}
 </script>
 
 <style scoped>
@@ -263,27 +262,34 @@
   .chart-wrapper {
 
     width: 100%;
-    
   }
 
   .chart-grid {
 
-    width: 100%;
+    width: 98%;
     margin: 20px auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, auto);
-    grid-gap: 10px 0px;
-    justify-items: center;
+    grid-gap: 10px;
 
   }
 
   .chart {
 
-    width: 95%;
+    width: 100%;
     background: #191919;
     box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
-    margin: 0 auto;
+    
+  }
 
+  #line {
+
+    grid-column: 1/3;
+  }
+
+  #bar {
+
+    grid-column: 2/4;
   }
 </style>

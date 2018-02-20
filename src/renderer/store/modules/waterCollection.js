@@ -8,9 +8,11 @@ export default {
 
           cost: null,
 
-          liters_per_minute: null,
+          var: null,
 
         },
+
+        const: 1000,
 
         dataCollection: {
 
@@ -77,5 +79,4 @@ export default {
         },
     },
 
-    getters: {}
 }

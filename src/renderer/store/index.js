@@ -63,7 +63,7 @@ export default new Vuex.Store({
 
       Object.keys(state[payload.type].weekAffairs).forEach( (day) => {
 
-        db.collection('Affairs').doc(day).set(state[payload.type].weekAffairs[day])
+        db.collection(payload.doc).doc(day).set(state[payload.type].weekAffairs[day])
 
       })
 
@@ -109,9 +109,9 @@ export default new Vuex.Store({
 
         }, 0)
 
-        let value = durations*stateModule.consts.liters_per_min*stateModule.consts.cost/1000
+        let value = durations*stateModule.consts.cost*stateModule.consts.var/stateModule.const
 
-        console.log(value);
+        console.log(value)
 
         stateModule.weekData.datasets[0].data.push(value.toFixed(2))
         stateModule.weekData.datasets[1].data.push((value/stateModule.consts.cost).toFixed(2))
@@ -130,7 +130,7 @@ export default new Vuex.Store({
 
         stateModule.weekAffairs[day].affairs.forEach( affair => {
 
-              let value = Number(affair.duration)*Number(affair.times)*stateModule.consts.liters_per_min*stateModule.consts.cost/1000
+              let value = Number(affair.duration)*Number(affair.times)*stateModule.consts.var*stateModule.consts.cost/stateModule.const
 
               if(result[affair.action] === undefined) {
 
@@ -257,7 +257,7 @@ export default new Vuex.Store({
           let consts = {
 
               cost: data.cost,
-              liters_per_min: data.field_1,
+              var: data.field_1,
 
           }
 
@@ -293,7 +293,7 @@ export default new Vuex.Store({
 
       let db = payload.db
 
-      db.collection('Affairs').where('type', '==', payload.type).get().then( querySnapshot => {
+      db.collection(payload.doc).where('type', '==', payload.type).get().then( querySnapshot => {
 
         querySnapshot.forEach( doc => {
 

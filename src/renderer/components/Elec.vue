@@ -20,7 +20,7 @@
           <i class="fas fa-euro-sign"></i>
         </div>
         <div >
-          <input v-model="consts.number_devices" type="text" name="kW" placeholder="Nº of devices">
+          <input v-model="consts.var" type="text" name="kW" placeholder="Nº of devices">
           <i class="fas fa-microchip"></i>
         </div>
         <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
@@ -69,13 +69,11 @@
 
     created() {
     
-      let payload = {db: this.$store.state.db, type: 'elec'}
-
       this.$store.dispatch('loadConsts', {db: this.$store.state.db, type: 'elec', doc: 'Elect'})
 
-      this.$store.dispatch('loadData', payload)
+      this.$store.dispatch('loadData', {db: this.$store.state.db, type: 'elec'})
 
-      this.$store.dispatch('loadAffairs', payload)
+      this.$store.dispatch('loadAffairs', {db: this.$store.state.db, type: 'elec', doc: 'Affairs1'})
 
       this.loaded = true;
 
@@ -94,7 +92,7 @@
       let consts = {
 
           cost: Number(this.consts.cost),
-          field_1: Number(this.consts.number_devices)
+          field_1: Number(this.consts.var)
 
       }
 
@@ -102,7 +100,7 @@
 
       //this.releaseWriteBack(writeBack, db);
 
-      this.$store.dispatch('releaseAffairs', {db: db, type: 'elec'});
+      this.$store.dispatch('releaseAffairs', {db: db, type: 'elec', doc: 'Affairs1'});
 
       window.clearInterval(this.interval)
 
