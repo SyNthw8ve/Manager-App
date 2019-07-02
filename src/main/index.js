@@ -13,11 +13,10 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
-
   mainWindow = new BrowserWindow({
     height: 620,
     useContentSize: true,
-    width: 1000,
+    width: 1000
   })
 
   mainWindow.loadURL(winURL)
@@ -30,16 +29,13 @@ function createWindow () {
 app.on('ready', createWindow)
 
 app.on('browser-window-created', (err, window) => {
-
-  window.setMenu(null);
+  window.setMenu(null)
 })
 
 app.on('window-all-closed', () => {
-
   if (process.platform !== 'darwin') {
     app.quit()
   }
-
 })
 
 app.on('activate', () => {

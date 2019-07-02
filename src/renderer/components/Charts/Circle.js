@@ -9,15 +9,12 @@ export default({
   mixins: [reactiveProp],
 
   data () {
-
     return {
 
     }
   },
 
   mounted () {
-
-    this.renderChart(this.chartData, {cutoutPercentage: 50 ,responsive: true, maintainAspectRatio: false})
-
+    this.renderChart(this.chartData, {cutoutPercentage: 50, responsive: true, maintainAspectRatio: false})
   }
 })

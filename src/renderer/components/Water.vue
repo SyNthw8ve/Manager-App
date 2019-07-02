@@ -8,25 +8,24 @@
           <div class="chart-wrapper">
             <doughnut :chart-data="actionData" class="chart"></doughnut>
           </div>
-          <div class="chart"></div>
           <div id="bar" class="chart-wrapper">
             <bar :chart-data="barData" class="chart"></bar>
           </div> 
+        <calendar id="calendar" :weekAffairs="weekAffairs" :active="active">
+          <form slot="form">
+            <i class="fas fa-tint icon"></i>
+            <div>
+              <input v-model="consts.cost" type="text" name="cost" placeholder="€ per m^3">
+              <i class="fas fa-euro-sign"></i>
+            </div>
+            <div>
+              <input v-model="consts.var" type="text" name="liters" placeholder="Nº of m^3">
+              <i class="fas fa-shower"></i>
+            </div>
+            <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
+          </form>
+        </calendar>
       </div>
-      <calendar :weekAffairs="weekAffairs" :active="active">
-        <form slot="form">
-          <i class="fas fa-tint"></i>
-          <div>
-            <input v-model="consts.cost" type="text" name="cost" placeholder="€ per m^3">
-            <i class="fas fa-euro-sign"></i>
-          </div>
-          <div>
-            <input v-model="consts.var" type="text" name="liters" placeholder="Nº of m^3">
-            <i class="fas fa-shower"></i>
-          </div>
-          <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
-        </form>
-      </calendar>
     </div>
     <div class="loading" v-if="!loaded">
       <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
@@ -62,7 +61,7 @@
 
       return {
 
-        active: 'water',
+        active: { comp: 'water', color: "#00e7ff" },
 
         loaded: false,
 
@@ -262,6 +261,7 @@
   .chart-wrapper {
 
     width: 100%;
+    margin: 0;
   }
 
   .chart-grid {
@@ -270,7 +270,7 @@
     margin: 20px auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
+    grid-template-rows: repeat(4, auto);
     grid-gap: 10px;
 
   }
@@ -285,11 +285,17 @@
 
   #line {
 
-    grid-column: 1/3;
+    grid-column: 1/4;
   }
 
   #bar {
 
+    grid-column: 1/2;
+  }
+
+  #calendar {
+
     grid-column: 2/4;
+    grid-row: 2/5;
   }
 </style>

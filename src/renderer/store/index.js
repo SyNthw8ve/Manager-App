@@ -8,13 +8,13 @@ import config from '../components/database/firebaseConfig'
 import modules from './modules'
 import waterModule from './modules/waterCollection.js'
 import elecModule from './modules/elecCollection.js'
-import gasModule from './modules/gasCollection.js' 
+import gasModule from './modules/gasCollection.js'
 
 Vue.use(Vuex)
 
 let firebaseApp = firebase.initializeApp(config)
 
-const fireStore = firebaseApp.firestore();
+const fireStore = firebaseApp.firestore()
 
 export default new Vuex.Store({
 
@@ -27,11 +27,11 @@ export default new Vuex.Store({
 
   },
 
-  state: { 
-    
+  state: {
+
     db: fireStore,
 
-    showModal: false,
+    showModal: false
   },
 
   getters: {
@@ -40,31 +40,24 @@ export default new Vuex.Store({
 
   mutations: {
 
-    loadData(state, payload) {
-
+    loadData (state, payload) {
       state[payload.type].dataCollection.labels = payload.labels
       state[payload.type].dataCollection.datasets[0].data = payload.data
-
     },
 
-    loadAffairs(state, payload) {
-
+    loadAffairs (state, payload) {
       state[payload.type].weekAffairs[payload.data.day] = payload.data
     },
 
-    loadConsts(state, payload) {
-
+    loadConsts (state, payload) {
       state[payload.type].consts = payload.consts
     },
 
-    releaseAffairs(state, payload) {
+    releaseAffairs (state, payload) {
+      let db = payload.db
 
-      let db = payload.db;
-
-      Object.keys(state[payload.type].weekAffairs).forEach( (day) => {
-
+      Object.keys(state[payload.type].weekAffairs).forEach((day) => {
         db.collection(payload.doc).doc(day).set(state[payload.type].weekAffairs[day])
-
       })
 
       state[payload.type].weekAffairs = {
@@ -82,225 +75,170 @@ export default new Vuex.Store({
       state[payload.type].actionData = {
 
         labels: [],
-  
+
         datasets: [{
 
-            label: 'Action Costs',
-            backgroundColor: [],
-            data: []
+          label: 'Action Costs',
+          backgroundColor: [],
+          data: []
 
         }]
       }
 
       state[payload.type].weekData.datasets[0].data = []
       state[payload.type].weekData.datasets[1].data = []
-    
     },
 
-    loadBarData(state, payload) {
-
+    loadBarData (state, payload) {
       let stateModule = state[payload.type]
 
-      Object.keys(stateModule.weekAffairs).forEach( (day, index) => {
-      
-        let durations = stateModule.weekAffairs[day].affairs.reduce( (prev, current) => {
-
-            return prev + Number(current.duration)*Number(current.times)
-
+      Object.keys(stateModule.weekAffairs).forEach((day, index) => {
+        let durations = stateModule.weekAffairs[day].affairs.reduce((prev, current) => {
+          return prev + Number(current.duration) * Number(current.times)
         }, 0)
 
-        let value = durations*stateModule.consts.cost*stateModule.consts.var/stateModule.const
+        let value = durations * stateModule.consts.cost * stateModule.consts.var / stateModule.const
 
         console.log(value)
 
         stateModule.weekData.datasets[0].data.push(value.toFixed(2))
-        stateModule.weekData.datasets[1].data.push((value/stateModule.consts.cost).toFixed(2))
-
+        stateModule.weekData.datasets[1].data.push((value / stateModule.consts.cost).toFixed(2))
       })
-
     },
 
-    loadAction(state, payload) {
-
+    loadAction (state, payload) {
       let result = {}
 
       let stateModule = state[payload.type]
 
-      Object.keys(stateModule.weekAffairs).forEach( (day) => {
+      Object.keys(stateModule.weekAffairs).forEach((day) => {
+        stateModule.weekAffairs[day].affairs.forEach(affair => {
+          let value = Number(affair.duration) * Number(affair.times) * stateModule.consts.var * stateModule.consts.cost / stateModule.const
 
-        stateModule.weekAffairs[day].affairs.forEach( affair => {
+          if (result[affair.action] === undefined) {
+            result[affair.action] = value
+          } else {
+            let v = Number(result[affair.action]) + value
 
-              let value = Number(affair.duration)*Number(affair.times)*stateModule.consts.var*stateModule.consts.cost/stateModule.const
-
-              if(result[affair.action] === undefined) {
-
-                  result[affair.action] = value
-
-              } else {
-
-                  let v = Number(result[affair.action]) + value
-
-                  result[affair.action] = v
-              }
-          })
+            result[affair.action] = v
+          }
+        })
       })
 
-      Object.keys(result).forEach( (action, index) => {
-
+      Object.keys(result).forEach((action, index) => {
         stateModule.actionData.labels.push(action)
 
         stateModule.actionData.datasets[0].data.push(result[action])
 
-        stateModule.actionData.datasets[0].backgroundColor.push(`rgb(0, 231,  ${255 - 30*(index)})`)
+        stateModule.actionData.datasets[0].backgroundColor.push(`rgb(0, 231,  ${255 - 30 * (index)})`)
       })
     },
 
-    updateWriteBack(state, payload) {
-
-      if(payload.type === 'water') {
-
+    updateWriteBack (state, payload) {
+      if (payload.type === 'water') {
         state.waterModule.writeBack.push(payload.data)
-
       } else if (payload.type === 'elec') {
-
-        state.elecDataCollection.writeBack.push(payload.data);
-
+        state.elecDataCollection.writeBack.push(payload.data)
       } else if (payload.type === 'gas') {
-
-        state.gasDataCollection.writeBack.push(payload.data);
+        state.gasDataCollection.writeBack.push(payload.data)
       }
     },
 
-    clearWriteBack(state, payload) {
-
-      if(payload.type === 'water') {
-
-        state.water.writeBack = [];
-
+    clearWriteBack (state, payload) {
+      if (payload.type === 'water') {
+        state.water.writeBack = []
       } else if (payload.type === 'elec') {
-
-        state.elecDataCollection.writeBack = [];
-
+        state.elecDataCollection.writeBack = []
       } else if (payload.type === 'gas') {
-
-        state.gasDataCollection.writeBack = [];
+        state.gasDataCollection.writeBack = []
       }
     },
 
-    showModal(state, payload) {
-
-      state.showModal = payload.modal;
-
+    showModal (state, payload) {
+      state.showModal = payload.modal
     },
 
-    addAffair(state, payload) {
-
+    addAffair (state, payload) {
       state[payload.type].weekAffairs[payload.day].affairs.push(payload.data)
-
     },
 
-    removeAffair(state, payload) {
+    removeAffair (state, payload) {
+      if (payload.type === 'water') {
+        state.water.weekAffairs[payload.day].affairs = state.water.weekAffairs[payload.day].affairs.filter(affair => (
 
-      if(payload.type === 'water') {
-
-        state.water.weekAffairs[payload.day].affairs = state.water.weekAffairs[payload.day].affairs.filter( affair => (
-          
           affair.action !== payload.affair.action || affair.duration !== payload.affair.duration || affair.times !== payload.affair.times))
-
       } else if (payload.type === 'elec') {
+        state.elecDataCollection.weekAffairs[payload.day].affairs = state.elecDataCollection.weekAffairs[payload.day].affairs.filter(affair => (
 
-        state.elecDataCollection.weekAffairs[payload.day].affairs = state.elecDataCollection.weekAffairs[payload.day].affairs.filter( affair => (
-          
           affair.action !== payload.affair.action || affair.duration !== payload.affair.duration || affair.times !== payload.affair.times))
-
       } else if (payload.type === 'gas') {
+        state.gasDataCollection.weekAffairs[payload.day].affairs = state.gasDataCollection.weekAffairs[payload.day].affairs.filter(affair => (
 
-        state.gasDataCollection.weekAffairs[payload.day].affairs = state.gasDataCollection.weekAffairs[payload.day].affairs.filter( affair => (
-          
           affair.action !== payload.affair.action || affair.duration !== payload.affair.duration || affair.times !== payload.affair.times))
       }
-    },
+    }
 
   },
 
   actions: {
 
-    loadData(context, payload) {
-
-        let db = payload.db
-
-        db.collection('Data').where('type', '==', payload.type).get().then( querySnapshot => {
-
-            let labels = []
-            let data = []
-
-            querySnapshot.forEach( doc => {
-
-              labels.push(doc.data().date);
-              data.push(doc.data().value);
-              
-            });
-
-            context.commit('loadData', {labels: labels, data: data, type: payload.type})
-  
-        }).catch( error => console.log(error))
-    },
-
-    loadConsts(context, payload) {
-
+    loadData (context, payload) {
       let db = payload.db
 
-      db.collection('consts').doc(payload.doc).get().then( doc => {
+      db.collection('Data').where('type', '==', payload.type).get().then(querySnapshot => {
+        let labels = []
+        let data = []
 
-          let data = doc.data();
+        querySnapshot.forEach(doc => {
+          labels.push(doc.data().date)
+          data.push(doc.data().value)
+        })
 
-          let consts = {
+        context.commit('loadData', {labels: labels, data: data, type: payload.type})
+      }).catch(error => console.log(error))
+    },
 
-              cost: data.cost,
-              var: data.field_1,
+    loadConsts (context, payload) {
+      let db = payload.db
 
-          }
+      db.collection('consts').doc(payload.doc).get().then(doc => {
+        let data = doc.data()
 
-          context.commit('loadConsts', {consts: consts, type: payload.type})
+        let consts = {
 
+          cost: data.cost,
+          var: data.field_1
+
+        }
+
+        context.commit('loadConsts', {consts: consts, type: payload.type})
       })
     },
 
-    updateWriteBack(context, payload) {
-
+    updateWriteBack (context, payload) {
       context.commit('updateWriteBack', payload)
-
     },
 
-    showModal( context, payload) {
-
+    showModal (context, payload) {
       context.commit('showModal', payload)
-
     },
 
-    addAffair(context, payload) {
-
+    addAffair (context, payload) {
       context.commit('addAffair', payload)
-
     },
 
-    removeAffair(context, payload) {
-
+    removeAffair (context, payload) {
       context.commit('removeAffair', payload)
     },
 
-    loadAffairs(context, payload){
-
+    loadAffairs (context, payload) {
       let db = payload.db
 
-      db.collection(payload.doc).where('type', '==', payload.type).get().then( querySnapshot => {
+      db.collection(payload.doc).where('type', '==', payload.type).get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          let data = doc.data()
 
-        querySnapshot.forEach( doc => {
-
-            let data = doc.data()
-
-            context.commit('loadAffairs', {data: data, type: payload.type})
-
+          context.commit('loadAffairs', {data: data, type: payload.type})
         })
 
         context.commit('loadBarData', {type: payload.type})
@@ -309,8 +247,7 @@ export default new Vuex.Store({
       })
     },
 
-    releaseAffairs(context, payload){
-
+    releaseAffairs (context, payload) {
       context.commit('releaseAffairs', payload)
     }
   }

@@ -1,35 +1,24 @@
-const RiveScript = require('rivescript');
-const bot = new RiveScript();
+const RiveScript = require('rivescript')
+const bot = new RiveScript()
 
-export default{
+export default {
 
   response: function (msg) {
-
-    let msgToDisplay = document.createElement('p');
-
-    msgToDisplay.innerHTML = "Hello!";
-
-    return msgToDisplay
-
+    return msg
   },
 
   init: function () {
+    bot.loadFile('src/main/watson.rive', this.fileRead, this.fileError)
 
-    bot.loadFile('src/main/watson.rive', this.fileRead, this.fileError );
-    console.log("Loaded")
-
+    return 'Loaded and ready for service!'
   },
 
-  fileRead: function(){
-
-    console.log("Read successful");
-    bot.sortReplies();
-
+  fileRead: function () {
+    console.log('Read successful')
+    bot.sortReplies()
   },
 
-  fileError: function(error){
-
+  fileError: function (error) {
     console.log(error)
-
   }
 }

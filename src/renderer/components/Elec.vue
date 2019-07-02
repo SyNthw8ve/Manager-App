@@ -8,24 +8,24 @@
           <div class="chart-wrapper">
             <bar :chart-data="barData" class="chart"></bar>
           </div>
-          <div class="chart-wrapper">
+          <div id="bar" class="chart-wrapper">
             <doughnut :chart-data="actionData" class="chart"></doughnut>
           </div>
-      </div>
-    <calendar :weekAffairs="weekAffairs" :active="active">
-      <form slot="form">
-        <i class="fas fa-bolt" ></i>
-        <div>
-          <input v-model="consts.cost" type="text" name="cost" placeholder="€ per Kw/h">
-          <i class="fas fa-euro-sign"></i>
-        </div>
-        <div >
-          <input v-model="consts.var" type="text" name="kW" placeholder="Nº of devices">
-          <i class="fas fa-microchip"></i>
-        </div>
-        <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
-      </form>
-    </calendar>
+      <calendar id="calendar" :weekAffairs="weekAffairs" :active="active">
+        <form slot="form">
+          <i class="fas fa-bolt icon" ></i>
+          <div>
+            <input v-model="consts.cost" type="text" name="cost" placeholder="€ per Kw/h">
+            <i class="fas fa-euro-sign"></i>
+          </div>
+          <div >
+            <input v-model="consts.var" type="text" name="kW" placeholder="Nº of devices">
+            <i class="fas fa-microchip"></i>
+          </div>
+          <input @click.prevent="submit()" id="submit" type="submit" name="cost" value="Submit">
+        </form>
+      </calendar>
+     </div>
   </div>
   <div class="loading" v-if="!loaded">
     <i id="spinner" class="fas fa-circle-notch fa-spin"></i>
@@ -47,7 +47,7 @@
 
       return {
 
-        active: 'elec',
+        active: { comp:'elec', color: '#ffdd00' },
 
         loaded: false,
 
@@ -261,27 +261,41 @@
   .chart-wrapper {
 
     width: 100%;
-
+    margin: 0;
   }
 
   .chart-grid {
 
-    width: 100%;
+    width: 98%;
     margin: 20px auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, auto);
-    grid-gap: 10px 0px;
-    justify-items: center;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, auto);
+    grid-gap: 10px;
 
   }
 
   .chart {
 
-    width: 95%;
+    width: 100%;
     background: #191919;
     box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
-    margin: 0 auto;
+    
+  }
 
+  #line {
+
+    grid-column: 1/4;
+  }
+
+  #bar {
+
+    grid-column: 1/2;
+  }
+
+  #calendar {
+
+    grid-column: 2/4;
+    grid-row: 2/5;
   }
 </style>

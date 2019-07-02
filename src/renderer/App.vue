@@ -61,21 +61,18 @@
 
   ::-webkit-scrollbar
   {
-      width: 10px;
-      background-color:#4F4F4F;
-      border-radius: 10px;
+    width: 5px;
+    background-color:#212733;
   }
 
   ::-webkit-scrollbar-track
   {
-  	border-radius: 10px;
-  	background-color: #4F4F4F;
+  	background-color: #191919;
   }
 
   ::-webkit-scrollbar-thumb
   {
-  	border-radius: 10px;
-  	background-color: #212733;
+  	background-color: #00e7ff;
   }
 
   

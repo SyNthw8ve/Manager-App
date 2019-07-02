@@ -107,8 +107,8 @@ export default {
 
                 active: '',
 
-                type: this.active
-
+                type: this.active.comp
+                
             },
 
         }
@@ -117,6 +117,26 @@ export default {
     components: {
 
         'modal': Modal
+    },
+
+    mounted() {
+
+        document.querySelector('.icon').style.color = this.active.color
+
+        let red = parseInt(this.active.color.substring(1,3), 16)
+        let green = parseInt(this.active.color.substring(3,5), 16)
+        let blue = parseInt(this.active.color.substring(5,7), 16)
+
+        document.querySelectorAll('.calendar .day i.remove-btn:hover').forEach(element => {
+
+            element.style.color = this.active.color
+        })
+
+        document.querySelectorAll('.day span').forEach(element => {
+
+            element.style.boxShadow =  "2px 2px 5px 1px rgba(" + red + ", " + green + ", " + blue + ", 0.75)"
+        })
+
     },
 
     props: ['weekAffairs', 'active'],
@@ -145,11 +165,11 @@ export default {
 
 .calendar {
 
-    width: 90%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 300px);
+    grid-template-rows: repeat(4, 265px);
     grid-gap: 10px 0px;
     justify-items: center;
 
@@ -217,13 +237,10 @@ export default {
     display: block;
     width: 95%;
     box-shadow: 0px 0px 0px 0px;
-
-
   }
 
   .calendar .day i.remove-btn {
 
-   
     position: static;
     float: right;
     cursor: pointer;
@@ -232,7 +249,7 @@ export default {
 
   .calendar .day i.remove-btn:hover {
 
-    color: #00e7ff;
+    color: #ff0000;
 
   }
 
@@ -274,7 +291,7 @@ export default {
 
   }
 
-  .fa-tint {
+  .icon {
 
     position: static;
     margin: 15px auto;
@@ -284,29 +301,6 @@ export default {
     color: #00e7ff;
     
   }
-
-  .fa-bolt {
-
-    position: static;
-    margin: 15px auto;
-    text-align: center;
-    display: block;
-    font-size: 40px;
-    color: #ffdd00;
-    
-   }
-
-   .fa-fire {
-
-    position: static;
-    margin: 15px auto;
-    text-align: center;
-    display: block;
-    font-size: 40px;
-    color: #ff0066;
-    
-  }
-
   
   #submit {
 

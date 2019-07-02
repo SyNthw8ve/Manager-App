@@ -5,9 +5,17 @@
         <div class="line"></div>
       </span>
 
-      <div id="chat-window"></div>
+      <div id="chat-window">
+        <ul>
+          <li v-for="message in messages">
+            <span>{{message}}</span>
+          </li>
+        </ul>
+      </div>
 
-      <div id="msg"></div>
+      <div id="msg">
+        <textarea @keypress.enter="post()"></textarea>
+      </div>
     </div>
 </template>
 
@@ -19,13 +27,37 @@
 
     name: 'chat',
 
+    data() {
+
+      return {
+
+        messages: []
+
+      }
+    },
+
+    created()
+    {
+      this.messages.push('Watson: ' + Watson.init());
+    },
+
     methods: {
 
       openSlideMenu()
       {
         document.getElementById('chat').classList.toggle('active')
       },
-      
+
+      post()
+      {
+        let msg = document.querySelector('textarea').value;
+
+        document.querySelector('textarea').value = ''
+
+        this.messages.push('Me: ' + msg)
+
+        this.messages.push('Watson: ' + Watson.response(msg))
+      }
     }
   }
 </script>
@@ -86,6 +118,30 @@
   background-color: #191919;
   margin: 20px 20px;
   height: 70%;
+  overflow: auto;
+  overflow-x: hidden;
+
+}
+
+#chat-window ul {
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+}
+
+#chat-window li {
+
+  margin-bottom: 5px;
+  font-size: 18px;
+  text-indent: 10px;
+
+}
+
+#chat-window li p {
+
+  white-space: pre-wrap;
 }
 
 #msg {
@@ -93,6 +149,25 @@
   background-color: #191919;
   margin: 20px 20px;
   height: 13%;
+  
+}
+
+#msg textarea {
+
+  border: none;
+  background-color: #191919;
+  width: 100%;
+  height: 100%;
+  text-indent: 5px;
+  font-size: 18px;
+  font-weight: 200;
+  color: azure;
+}
+
+#msg textarea:focus {
+
+  outline: none;
+
 }
   
 </style>

@@ -16,10 +16,10 @@ new Vue({
 
   components: { App },
 
-  created() {
+  created () {
 
-      //Watson.init();
-      
+    // Watson.init();
+
   },
 
   router: router,

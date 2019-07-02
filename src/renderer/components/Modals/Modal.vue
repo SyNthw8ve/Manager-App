@@ -18,7 +18,6 @@
 </template>
 
 <script>
-
   export default {
     components: {
 
@@ -27,67 +26,62 @@
     props: ['activeData'],
 
     data () {
-
       return {
 
-          data: {
+        data: {
 
-            action: null,
+          action: null,
 
-            duration: null,
+          duration: null,
 
-            times: null 
-          }
+          times: null
+        }
 
       }
     },
 
     methods: {
 
-        close() {
+      close () {
+        this.$store.dispatch('showModal', {modal: false})
 
-            this.$store.dispatch('showModal', {modal: false});
+        this.data = {
 
-            this.data = {
+          action: null,
 
-                action: null,
+          duration: null,
 
-                duration: null,
+          times: null }
+      },
 
-                times: null }
-        },
+      submit () {
+        const payload = {
 
-        submit() {
-
-            const payload = {
-
-                type: this.activeData.type,
-                day: this.activeData.active.toLowerCase(),
-                data: this.data
-            }
-
-            this.$store.dispatch('addAffair', payload)
-
-            this.data = {
-
-                action: null,
-
-                duration: null,
-
-                times: null }
-            
+          type: this.activeData.type,
+          day: this.activeData.active.toLowerCase(),
+          data: this.data
         }
+
+        this.$store.dispatch('addAffair', payload)
+
+        this.data = {
+
+          action: null,
+
+          duration: null,
+
+          times: null }
+      }
     },
 
     computed: {
 
-        modal(){
-
-            return this.$store.state.showModal
-        }
+      modal () {
+        return this.$store.state.showModal
+      }
     },
 
-    name: 'modal',
+    name: 'modal'
 
   }
 </script>

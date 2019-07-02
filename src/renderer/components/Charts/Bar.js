@@ -9,7 +9,6 @@ export default({
   mixins: [reactiveProp],
 
   data () {
-
     return {
 
       options: {
@@ -18,22 +17,19 @@ export default({
 
           xAxes: [{
 
-              barThickness : 20
+            barThickness: 20
 
           }]
         },
         responsive: true,
         maintainAspectRatio: false
       }
-      
-    }
 
+    }
   },
 
-  mounted() {
-
+  mounted () {
     this.renderChart(this.chartData, this.options)
-
   }
 
 })

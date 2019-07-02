@@ -9,18 +9,13 @@ export default({
   mixins: [reactiveProp],
 
   data () {
-
     return {
-      
-    }
 
+    }
   },
 
-  mounted() {
-
+  mounted () {
     this.renderChart(this.chartData, {responsive: true, maintainAspectRatio: false})
-
   }
 
 })
-
